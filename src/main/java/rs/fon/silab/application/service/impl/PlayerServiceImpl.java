@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import rs.fon.silab.application.converter.PlayerConverter;
 import rs.fon.silab.application.dto.PlayerDto;
+import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
 import rs.fon.silab.application.model.PlayerEntity;
 import rs.fon.silab.application.repository.PlayerRepository;
@@ -44,6 +45,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (entity.isPresent()) {
             throw new EntityExistsException(entity.get(), "Player already exists");
         }
+        
         return playerConverter.toDto(playerRepository.save(playerConverter.toEntity(playerDto)));
     }
 
@@ -63,7 +65,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
         return Optional.empty();
     }
-
     @Override
     public void delete(Long id) {
         playerRepository.deleteById(id);
@@ -72,6 +73,27 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public List<PlayerDto> findByAgeGreaterThan(int age) {
         List<PlayerEntity> players = playerRepository.findByAgeGreaterThan(age);
+        return players.stream().map((entity)->{
+            return playerConverter.toDto(entity);
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public PlayerDto updateInfo(PlayerDto playerDto, long id) throws EntityDoesntExistException {
+          Optional<PlayerEntity> player = playerRepository.findById(id);
+        if (player.isEmpty()){
+            throw new EntityDoesntExistException(playerDto,"Entity with given id doesnt exist.");
+        }
+        PlayerDto playerD=playerConverter.toDto(player.get());
+        playerDto.setPlayerId(id);
+        playerDto.setName(player.get().getName());
+
+        return playerConverter.toDto(playerRepository.save(playerConverter.toEntity(playerDto)));
+    }
+
+    @Override
+    public List<PlayerDto> findAll() {
+        List<PlayerEntity> players = playerRepository.findAll();
         return players.stream().map((entity)->{
             return playerConverter.toDto(entity);
         }).collect(Collectors.toList());

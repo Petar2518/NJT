@@ -6,7 +6,6 @@ package rs.fon.silab.application.dto;
 
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 
 
@@ -25,6 +24,7 @@ public class GameDto implements Dto{
     private int homeTeamGoals;
     @NotNull(message= "Number of goals scored by away team is required")
     private int awayTeamGoals;
+
 
     public GameDto() {
     }

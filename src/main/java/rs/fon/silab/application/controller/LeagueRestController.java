@@ -22,63 +22,65 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import rs.fon.silab.application.dto.TeamDto;
+import rs.fon.silab.application.dto.LeagueDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
-import rs.fon.silab.application.service.TeamService;
+import rs.fon.silab.application.service.LeagueService;
 
 /**
  *
  * @author gg
  */
 @RestController
-public class TeamRestController {
-
+public class LeagueRestController {
+    
     @Autowired
-    private TeamService teamService;
-
-    @GetMapping("teams/all")
-    public List<TeamDto> allTeams() {
-        return teamService.findAll();
+    private LeagueService leagueService;
+    
+    
+    @GetMapping("/leagues/all")
+    public List<LeagueDto> findAll(){
+        return leagueService.findAll();
     }
-
-    @GetMapping("teams/name/{name}")
-    public ResponseEntity<Object> findByName(@PathVariable String name) {
-        Optional<TeamDto> entity = teamService.findByName(name);
-        if (entity.isPresent()) {
+    
+    @GetMapping("leagues/nation/{nation}")
+    public List<LeagueDto> findByNation(@PathVariable String nation){
+        return leagueService.findAllByNation(nation);
+    }
+    
+    @GetMapping("leagues/division/{division}")
+    public List<LeagueDto> findByDivision(@PathVariable String division){
+        return leagueService.findAllByDivision(division);
+    }
+    
+    @GetMapping("leagues/name/{name}")
+    public List<LeagueDto> findByName(@PathVariable String name){
+        return leagueService.findByName(name);
+    }
+    @GetMapping("leagues/get/{id}")
+    public ResponseEntity<Object> findById(@PathVariable Long id){
+        Optional<LeagueDto> entity = leagueService.findById(id);
+        if(entity.isPresent()){
             return ResponseEntity.ok(entity.get());
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid team");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid league");
     }
-
-    @PostMapping("teams/save")
-    public ResponseEntity<Object> save(@Valid @RequestBody TeamDto teamDto) {
+    @PostMapping("leagues/save")
+    public ResponseEntity<Object> save(@Valid @RequestBody LeagueDto leagueDto){
         try {
-            return ResponseEntity.ok(teamService.save(teamDto));
+            return ResponseEntity.ok(leagueService.save(leagueDto));
         } catch (EntityExistsException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
-
-    @GetMapping("teams/city/{city}")
-    public List<TeamDto> findTeamsByCity(@PathVariable String city) {
-        return teamService.findAllByCity(city);
+    @RequestMapping(value="leagues/delete/{id}",method ={RequestMethod.DELETE, RequestMethod.GET})
+    public void delete(Long id){
+        leagueService.delete(id);
     }
-
-    @GetMapping("teams/country/{country}")
-    public List<TeamDto> findTeamsByCountry(@PathVariable String country) {
-        return teamService.findAllByCountry(country);
-    }
-
-    @RequestMapping(value = "teams/delete/{name}", method = {RequestMethod.GET, RequestMethod.DELETE})
-    public void delete(@PathVariable String name) {
-        teamService.delete(name);
-    }
-
-    @RequestMapping(value = "teams/update/{name}", method = {RequestMethod.GET, RequestMethod.PUT})
-    public ResponseEntity<Object> update(@PathVariable String name, @Valid @RequestBody TeamDto teamDto){
+    @RequestMapping(value = "leagues/update/{id}", method = {RequestMethod.GET, RequestMethod.PUT})
+    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody LeagueDto leagueDto){
         try {
-            return ResponseEntity.ok(teamService.updateLocation(teamDto, name));
+            return ResponseEntity.ok(leagueService.updateName(leagueDto, id));
         } catch (EntityDoesntExistException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }

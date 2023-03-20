@@ -13,9 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
+import rs.fon.silab.application.util.PositionEnum;
 import javax.persistence.Table;
-import rs.fon.silab.application.Enums.PositionEnum;
 
 /**
  *
@@ -132,7 +131,7 @@ public class PlayerEntity implements Serializable,rs.fon.silab.application.model
         return "PlayerEntity{" + "playerId=" + playerId + ", name=" + name + ", position=" + position + ", team=" + team + ", age=" + age + '}';
     }
     
-    
-    
+      
     
 }
+

@@ -4,8 +4,8 @@
  */
 package rs.fon.silab.application.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import rs.fon.silab.application.Enums.PositionEnum;
 import rs.fon.silab.application.dto.PlayerDto;
 import rs.fon.silab.application.model.PlayerEntity;
 
@@ -15,7 +15,13 @@ import rs.fon.silab.application.model.PlayerEntity;
  */
 @Component
 public class PlayerConverter implements GenericConverter<PlayerDto, PlayerEntity>{
-    TeamConverter tc = new TeamConverter();
+    private final TeamConverter tc;
+    @Autowired
+    public PlayerConverter(TeamConverter tc) {
+        this.tc = tc;
+    }
+    
+ 
     @Override
     public PlayerEntity toEntity(PlayerDto d) {
         return new PlayerEntity(d.getPlayerId(), d.getName(), d.getPosition(),tc.toEntity(d.getTeam()) ,d.getAge());

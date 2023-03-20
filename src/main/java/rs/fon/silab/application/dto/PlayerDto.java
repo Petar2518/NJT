@@ -4,11 +4,10 @@
  */
 package rs.fon.silab.application.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import rs.fon.silab.application.Enums.PositionEnum;
-import rs.fon.silab.application.model.TeamEntity;
+import rs.fon.silab.application.util.PositionEnum;
 
 /**
  *
@@ -19,6 +18,7 @@ public class PlayerDto implements Dto{
     private Long playerId;
     @NotNull(message= "Home team is required")
     private String name;
+    @Schema(defaultValue = "midfielder")
     private PositionEnum position;
     private TeamDto team;
     private int age;

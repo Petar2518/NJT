@@ -7,6 +7,7 @@ package rs.fon.silab.application.service;
 import java.util.List;
 import java.util.Optional;
 import rs.fon.silab.application.dto.TeamDto;
+import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
 
 /**
@@ -24,6 +25,8 @@ public interface TeamService {
     List<TeamDto> findAllByCity(String city);
 
     Optional<TeamDto> findByName(String name);
+
+    TeamDto updateLocation(TeamDto teamDto, String name) throws EntityDoesntExistException;
 
     void delete(String name);
 

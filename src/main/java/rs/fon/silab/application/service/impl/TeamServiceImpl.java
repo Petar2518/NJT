@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import rs.fon.silab.application.converter.TeamConverter;
 import rs.fon.silab.application.dto.TeamDto;
+import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
 import rs.fon.silab.application.model.TeamEntity;
 import rs.fon.silab.application.repository.TeamRepository;
@@ -37,6 +38,7 @@ public class TeamServiceImpl implements TeamService{
         if (entity.isPresent()){
             throw new EntityExistsException(entity.get(), "Team already exists.");
         }
+        
         return teamConverter.toDto(teamRepository.save(teamConverter.toEntity(teamDto)));
     }
 
@@ -76,6 +78,18 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public void delete(String name) {
         teamRepository.deleteById(name);
+    }
+
+    @Override
+    public TeamDto updateLocation(TeamDto teamDto, String name) throws EntityDoesntExistException {
+         Optional<TeamEntity> team = teamRepository.findById(name);
+        if (team.isEmpty()){
+            throw new EntityDoesntExistException(teamDto,"Entity with given id doesnt exist.");
+        }
+        TeamDto teamD=teamConverter.toDto(team.get());
+        teamD.setCountry(teamDto.getCountry());
+        teamD.setCity(teamDto.getCity());
+        return teamConverter.toDto(teamRepository.save(teamConverter.toEntity(teamD)));
     }
     
     

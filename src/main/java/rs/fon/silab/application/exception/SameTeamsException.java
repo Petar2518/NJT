@@ -8,10 +8,11 @@ package rs.fon.silab.application.exception;
  *
  * @author gg
  */
-public class EntityExistsException extends ProjectException{
+public class SameTeamsException extends ProjectException {
+
     private final Object entity;
 
-    public EntityExistsException(Object entity, String message) {
+    public SameTeamsException(Object entity, String message) {
         super(message);
         this.entity = entity;
     }
@@ -19,5 +20,5 @@ public class EntityExistsException extends ProjectException{
     public Object getEntity() {
         return entity;
     }
-    
+
 }

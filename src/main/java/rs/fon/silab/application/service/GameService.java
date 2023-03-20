@@ -7,7 +7,9 @@ package rs.fon.silab.application.service;
 import java.util.List;
 import java.util.Optional;
 import rs.fon.silab.application.dto.GameDto;
+import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
+import rs.fon.silab.application.exception.SameTeamsException;
 
 /**
  *
@@ -15,7 +17,7 @@ import rs.fon.silab.application.exception.EntityExistsException;
  */
 public interface GameService {
 
-    GameDto save(GameDto gameDto) throws EntityExistsException;
+    GameDto save(GameDto gameDto) throws EntityExistsException, SameTeamsException;
 
     List<GameDto> findAll();
 
@@ -26,4 +28,6 @@ public interface GameService {
     List<GameDto> findAllByAwayTeam(String teamName);
 
     void delete(Long id);
+    
+    GameDto updateResult(GameDto gameDto, Long id) throws EntityDoesntExistException;
 }

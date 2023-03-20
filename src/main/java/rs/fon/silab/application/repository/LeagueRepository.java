@@ -7,15 +7,19 @@ package rs.fon.silab.application.repository;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import rs.fon.silab.application.model.GameGoalscorerEntity;
+import rs.fon.silab.application.model.LeagueEntity;
 
 /**
  *
  * @author gg
  */
 @Repository
-public interface GameGoalscorerRepository extends JpaRepository<GameGoalscorerEntity, GameGoalscorerEntity.ggId>{
+public interface LeagueRepository extends JpaRepository<LeagueEntity, Long>{
+
+    public List<LeagueEntity> findAllByLeagueNation(String nation);
+
+    public List<LeagueEntity> findAllByLeagueDivision(String division);
+
+    public List<LeagueEntity> findAllByLeagueName(String name);
     
-    List<GameGoalscorerEntity> findAllByIdGameId(Long gameId);
-    List<GameGoalscorerEntity> findAllByIdPlayerId(Long playerId);
 }

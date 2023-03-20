@@ -4,6 +4,7 @@
  */
 package rs.fon.silab.application.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rs.fon.silab.application.dto.GameGoalscorerDto;
 import rs.fon.silab.application.model.GameGoalscorerEntity;
@@ -14,17 +15,27 @@ import rs.fon.silab.application.model.GameGoalscorerEntity;
  */
 @Component
 public class GameGoalscorerConverter implements GenericConverter<GameGoalscorerDto,GameGoalscorerEntity>{
-    GameConverter gc = new GameConverter();
-    PlayerConverter pc = new PlayerConverter();
+    private final GameConverter gc;
+    private final PlayerConverter pc;
+    @Autowired
+     public GameGoalscorerConverter(GameConverter gc, PlayerConverter pc) {
+        this.gc = gc;
+        this.pc = pc;
+    }
+    
     @Override
     public GameGoalscorerEntity toEntity(GameGoalscorerDto d) {
-        return new GameGoalscorerEntity(d.getId(), gc.toEntity(d.getGame()), pc.toEntity(d.getPlayer()), d.getGoals());
+       
+        GameGoalscorerEntity.ggId ggid = new GameGoalscorerEntity.ggId(d.getGame().getGameId(), d.getPlayer().getPlayerId());
+        return new GameGoalscorerEntity(ggid, gc.toEntity(d.getGame()),pc.toEntity(d.getPlayer()), d.getGoals());
     }
+
+   
 
     @Override
     public GameGoalscorerDto toDto(GameGoalscorerEntity e) {
         
-        return new GameGoalscorerDto(e.getGgId(), gc.toDto(e.getGame()), pc.toDto(e.getPlayer()), e.getGoals());
+        return new GameGoalscorerDto(gc.toDto(e.getGame()), pc.toDto(e.getPlayer()), e.getGoals());
         
     }
     

@@ -7,7 +7,6 @@ package rs.fon.silab.application.dto;
 import java.util.Objects;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import rs.fon.silab.application.model.GameGoalscorerEntity;
 
 /**
  *
@@ -15,8 +14,8 @@ import rs.fon.silab.application.model.GameGoalscorerEntity;
  */
 public class GameGoalscorerDto implements Dto {
     
-    @NotNull(message="ID is required")
-    private Long id;
+//    @NotNull(message="ID is required")
+//    private Long id;
     @NotNull(message="Game is required")
     private GameDto game;
     @NotNull(message="Player is required")
@@ -25,22 +24,15 @@ public class GameGoalscorerDto implements Dto {
     @Min(value = 1, message="Player must score more than 0 goals")
     private int goals;
 
-    public GameGoalscorerDto() {
-    }
-
-    public GameGoalscorerDto(Long id, GameDto game, PlayerDto player, int goals) {
-        this.id = id;
+    public GameGoalscorerDto(GameDto game, PlayerDto player, int goals) {
         this.game = game;
         this.player = player;
         this.goals = goals;
     }
+    
+    
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public GameGoalscorerDto() {
     }
 
     public GameDto getGame() {
@@ -70,10 +62,9 @@ public class GameGoalscorerDto implements Dto {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        hash = 83 * hash + Objects.hashCode(this.game);
-        hash = 83 * hash + Objects.hashCode(this.player);
-        hash = 83 * hash + this.goals;
+        hash = 59 * hash + Objects.hashCode(this.game);
+        hash = 59 * hash + Objects.hashCode(this.player);
+        hash = 59 * hash + this.goals;
         return hash;
     }
 
@@ -92,9 +83,6 @@ public class GameGoalscorerDto implements Dto {
         if (this.goals != other.goals) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.game, other.game)) {
             return false;
         }
@@ -103,8 +91,7 @@ public class GameGoalscorerDto implements Dto {
 
     @Override
     public String toString() {
-        return "GameGoalscorerDto{" + "id=" + id + ", game=" + game + ", player=" + player + ", goals=" + goals + '}';
+        return "GameGoalscorerDto{" + "game=" + game + ", player=" + player + ", goals=" + goals + '}';
     }
-    
     
 }

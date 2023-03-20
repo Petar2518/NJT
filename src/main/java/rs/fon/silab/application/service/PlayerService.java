@@ -7,6 +7,7 @@ package rs.fon.silab.application.service;
 import java.util.List;
 import java.util.Optional;
 import rs.fon.silab.application.dto.PlayerDto;
+import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
 
 /**
@@ -15,15 +16,20 @@ import rs.fon.silab.application.exception.EntityExistsException;
  */
 public interface PlayerService {
 
-    PlayerDto save(PlayerDto playerDto) throws EntityExistsException;
+    public PlayerDto save(PlayerDto playerDto) throws EntityExistsException;
 
-    List<PlayerDto> findAllByTeam(String teamName);
+    public List<PlayerDto> findAllByTeam(String teamName);
 
-    List<PlayerDto> findByAgeLessThanEqual(int age);
+    public List<PlayerDto> findByAgeLessThanEqual(int age);
 
-    Optional<PlayerDto> findById(Long id);
+    public Optional<PlayerDto> findById(Long id);
 
-    void delete(Long id);
+    public void delete(Long id);
 
     public List<PlayerDto> findByAgeGreaterThan(int age);
+    
+    public PlayerDto updateInfo(PlayerDto playerDto, long id) throws EntityDoesntExistException;
+    
+    public List<PlayerDto> findAll();
+
 }

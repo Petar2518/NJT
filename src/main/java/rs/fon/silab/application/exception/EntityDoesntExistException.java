@@ -8,16 +8,19 @@ package rs.fon.silab.application.exception;
  *
  * @author gg
  */
-public class EntityExistsException extends ProjectException{
-    private final Object entity;
+public class EntityDoesntExistException extends ProjectException{
+    private final Object object;
 
-    public EntityExistsException(Object entity, String message) {
+    public EntityDoesntExistException(Object object, String message) {
         super(message);
-        this.entity = entity;
+        this.object = object;
     }
 
-    public Object getEntity() {
-        return entity;
+    public Object getObject() {
+        return object;
     }
+    
+    
+    
     
 }

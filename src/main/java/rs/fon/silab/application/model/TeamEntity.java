@@ -6,11 +6,13 @@ package rs.fon.silab.application.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+import java.util.List;
+import javax.persistence.OneToMany;
 /**
  *
  * @author gg
@@ -25,6 +27,9 @@ public class TeamEntity implements Serializable, rs.fon.silab.application.model.
     private String country;
     @Column 
     private String city;
+    @OneToMany(mappedBy = "team")
+    List<PlayerEntity> players;
+
 
     public TeamEntity() {
     }
@@ -34,6 +39,9 @@ public class TeamEntity implements Serializable, rs.fon.silab.application.model.
         this.country = country;
         this.city = city;
     }
+
+
+
 
     public String getTeamName() {
         return teamName;
@@ -59,12 +67,21 @@ public class TeamEntity implements Serializable, rs.fon.silab.application.model.
         this.city = city;
     }
 
+    public List<PlayerEntity> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<PlayerEntity> players) {
+        this.players = players;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.teamName);
-        hash = 79 * hash + Objects.hashCode(this.country);
-        hash = 79 * hash + Objects.hashCode(this.city);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.teamName);
+        hash = 67 * hash + Objects.hashCode(this.country);
+        hash = 67 * hash + Objects.hashCode(this.city);
+        hash = 67 * hash + Objects.hashCode(this.players);
         return hash;
     }
 
@@ -86,13 +103,19 @@ public class TeamEntity implements Serializable, rs.fon.silab.application.model.
         if (!Objects.equals(this.country, other.country)) {
             return false;
         }
-        return Objects.equals(this.city, other.city);
+        if (!Objects.equals(this.city, other.city)) {
+            return false;
+        }
+        return Objects.equals(this.players, other.players);
     }
 
     @Override
     public String toString() {
-        return "TeamEntity{" + "teamName=" + teamName + ", country=" + country + ", city=" + city + '}';
+        return "TeamEntity{" + "teamName=" + teamName + ", country=" + country + ", city=" + city + ", players=" + players + '}';
     }
+
+    
+    
     
     
     

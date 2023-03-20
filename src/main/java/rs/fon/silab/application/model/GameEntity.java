@@ -6,14 +6,11 @@ package rs.fon.silab.application.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
 import javax.persistence.Table;
 
 /**
@@ -38,10 +35,12 @@ public class GameEntity implements Serializable,rs.fon.silab.application.model.E
     private int awayTeamGoals;
 //    private Date date; Potrebno i u bazi implementirati date
     
-    @OneToMany(mappedBy = "game")
-    Set<GameGoalscorerEntity> goals;
+//    @OneToMany(mappedBy = "game")
+//    Set<GameGoalscorerEntity> goals;
     
-
+//    @ManyToOne
+//    @JoinColumn(name="league", referencedColumnName = "league")
+//    private LeagueEntity league;
     public GameEntity() {
     }
 

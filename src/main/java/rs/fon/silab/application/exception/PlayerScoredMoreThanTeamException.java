@@ -8,13 +8,15 @@ package rs.fon.silab.application.exception;
  *
  * @author gg
  */
-public class EntityExistsException extends ProjectException{
+public class PlayerScoredMoreThanTeamException extends ProjectException{
     private final Object entity;
 
-    public EntityExistsException(Object entity, String message) {
+    public PlayerScoredMoreThanTeamException(Object entity, String message) {
         super(message);
         this.entity = entity;
     }
+
+    
 
     public Object getEntity() {
         return entity;

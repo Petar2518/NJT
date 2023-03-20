@@ -4,8 +4,12 @@
  */
 package rs.fon.silab.application.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
+
 
 /**
  *
@@ -18,14 +22,17 @@ public class TeamDto implements Dto{
     private String country;
     @NotNull(message= "City is required")
     private String city;
+    private List<PlayerDto> players;
+    
 
     public TeamDto() {
     }
 
-    public TeamDto(String teamName, String country, String city) {
+    public TeamDto(String teamName, String country, String city, List<PlayerDto> players) {
         this.teamName = teamName;
         this.country = country;
         this.city = city;
+        this.players = players;
     }
 
     public String getTeamName() {
@@ -52,12 +59,21 @@ public class TeamDto implements Dto{
         this.city = city;
     }
 
+    public List<PlayerDto> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<PlayerDto> players) {
+        this.players = players;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.teamName);
-        hash = 67 * hash + Objects.hashCode(this.country);
-        hash = 67 * hash + Objects.hashCode(this.city);
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.teamName);
+        hash = 59 * hash + Objects.hashCode(this.country);
+        hash = 59 * hash + Objects.hashCode(this.city);
+        hash = 59 * hash + Objects.hashCode(this.players);
         return hash;
     }
 
@@ -79,13 +95,23 @@ public class TeamDto implements Dto{
         if (!Objects.equals(this.country, other.country)) {
             return false;
         }
-        return Objects.equals(this.city, other.city);
+        if (!Objects.equals(this.city, other.city)) {
+            return false;
+        }
+        return Objects.equals(this.players, other.players);
     }
 
     @Override
     public String toString() {
-        return "TeamDto{" + "teamName=" + teamName + ", country=" + country + ", city=" + city + '}';
+        return "TeamDto{" + "teamName=" + teamName + ", country=" + country + ", city=" + city + ", players=" + players + '}';
     }
+    
+
+
+   
+
+    
+
     
     
 }
