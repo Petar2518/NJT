@@ -4,10 +4,8 @@
  */
 package rs.fon.silab.application.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.HashSet;
+
 import java.util.Objects;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 /**

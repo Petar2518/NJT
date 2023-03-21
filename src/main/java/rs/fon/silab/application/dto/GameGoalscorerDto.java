@@ -14,8 +14,7 @@ import javax.validation.constraints.NotNull;
  */
 public class GameGoalscorerDto implements Dto {
     
-//    @NotNull(message="ID is required")
-//    private Long id;
+
     @NotNull(message="Game is required")
     private GameDto game;
     @NotNull(message="Player is required")

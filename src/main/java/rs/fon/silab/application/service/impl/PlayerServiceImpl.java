@@ -84,7 +84,6 @@ public class PlayerServiceImpl implements PlayerService {
         if (player.isEmpty()){
             throw new EntityDoesntExistException(playerDto,"Entity with given id doesnt exist.");
         }
-        PlayerDto playerD=playerConverter.toDto(player.get());
         playerDto.setPlayerId(id);
         playerDto.setName(player.get().getName());
 

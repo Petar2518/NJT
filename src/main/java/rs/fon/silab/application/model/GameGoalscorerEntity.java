@@ -21,10 +21,6 @@ import javax.persistence.Table;
 @Table(name = "game_goalscorer")
 public class GameGoalscorerEntity implements Serializable,rs.fon.silab.application.model.Entity{
     
-//    @Id
-//    @Column(name="gg_id")
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long ggId;
     @EmbeddedId
     ggId id;
     @ManyToOne
