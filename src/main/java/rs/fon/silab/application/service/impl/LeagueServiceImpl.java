@@ -32,10 +32,6 @@ public class LeagueServiceImpl implements LeagueService{
 
     @Override
     public LeagueDto save(LeagueDto leagueDto) throws EntityExistsException {
-        Optional<LeagueEntity> entity = leagueRepository.findById(leagueDto.getLeagueId());
-        if (entity.isPresent()){
-            throw new EntityExistsException(entity, "League already exists");
-        }
         return leagueConverter.toDto(leagueRepository.save(leagueConverter.toEntity(leagueDto)));
     }
 
@@ -92,9 +88,9 @@ public class LeagueServiceImpl implements LeagueService{
         if (league.isEmpty()){
             throw new EntityDoesntExistException(leagueDto,"Entity with given id doesnt exist.");
         }
-        LeagueDto leagueD=leagueConverter.toDto(league.get());
-        leagueD.setLeagueName(leagueDto.getLeagueName());
-        return leagueConverter.toDto(leagueRepository.save(leagueConverter.toEntity(leagueD)));
+
+        leagueDto.setLeagueId(id);
+        return leagueConverter.toDto(leagueRepository.save(leagueConverter.toEntity(leagueDto)));
     }
     
     

@@ -5,11 +5,7 @@
 package rs.fon.silab.application.converter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import rs.fon.silab.application.dto.PlayerDto;
 import rs.fon.silab.application.dto.TeamDto;

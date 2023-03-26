@@ -4,10 +4,8 @@
  */
 package rs.fon.silab.application.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 
@@ -18,15 +16,20 @@ import javax.validation.constraints.NotNull;
 public class TeamDto implements Dto{
     @NotNull(message= "Team name is required")
     private String teamName;
-    @NotNull(message= "Country is required")
+//    @NotNull(message= "Country is required")
     private String country;
-    @NotNull(message= "City is required")
+//    @NotNull(message= "City is required")
     private String city;
     private List<PlayerDto> players;
     
 
     public TeamDto() {
     }
+
+    public TeamDto(String teamName) {
+        this.teamName = teamName;
+    }
+    
 
     public TeamDto(String teamName, String country, String city, List<PlayerDto> players) {
         this.teamName = teamName;
@@ -105,9 +108,9 @@ public class TeamDto implements Dto{
     public String toString() {
         return "TeamDto{" + "teamName=" + teamName + ", country=" + country + ", city=" + city + ", players=" + players + '}';
     }
+
     
-
-
+    
    
 
     

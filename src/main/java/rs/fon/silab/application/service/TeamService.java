@@ -29,5 +29,5 @@ public interface TeamService {
     TeamDto updateLocation(TeamDto teamDto, String name) throws EntityDoesntExistException;
 
     void delete(String name);
-
+    
 }

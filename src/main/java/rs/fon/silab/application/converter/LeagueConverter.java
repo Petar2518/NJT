@@ -4,9 +4,6 @@
  */
 package rs.fon.silab.application.converter;
 
-import java.util.HashSet;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rs.fon.silab.application.dto.LeagueDto;
 import rs.fon.silab.application.model.LeagueEntity;

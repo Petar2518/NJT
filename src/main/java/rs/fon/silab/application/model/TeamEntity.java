@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 @Entity
 @Table(name="team")
 public class TeamEntity implements Serializable, rs.fon.silab.application.model.Entity{
-    @Id
+     @Id
     @Column(name="name")
     private String teamName;
     @Column

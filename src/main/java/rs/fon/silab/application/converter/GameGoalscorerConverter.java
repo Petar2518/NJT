@@ -27,7 +27,7 @@ public class GameGoalscorerConverter implements GenericConverter<GameGoalscorerD
     public GameGoalscorerEntity toEntity(GameGoalscorerDto d) {
        
         GameGoalscorerEntity.ggId ggid = new GameGoalscorerEntity.ggId(d.getGame().getGameId(), d.getPlayer().getPlayerId());
-        return new GameGoalscorerEntity(ggid, gc.toEntity(d.getGame()),pc.toEntity(d.getPlayer()), d.getGoals());
+        return new GameGoalscorerEntity(ggid, gc.toEntityIdOnly(d.getGame()),pc.toEntityIdOnly(d.getPlayer()), d.getGoals());
     }
 
    

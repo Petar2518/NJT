@@ -35,13 +35,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameDto save(GameDto gameDto) throws EntityExistsException, SameTeamsException {
-        Optional<GameEntity> entity = gameRepository.findById(gameDto.getGameId());
-        if (entity.isPresent()) {
-            throw new EntityExistsException(entity.get(), "Game already exists");
-        }
-        if (gameDto.getHomeTeam().equals(gameDto.getAwayTeam())) {
-            throw new SameTeamsException(gameDto, "Teams have to be different.");
-        }
+
         return gameConverter.toDto(gameRepository.save(gameConverter.toEntity(gameDto)));
     }
 

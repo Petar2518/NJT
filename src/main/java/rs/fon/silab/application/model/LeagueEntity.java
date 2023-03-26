@@ -10,6 +10,8 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.Table;
@@ -21,6 +23,7 @@ import javax.persistence.Table;
 @Table(name="league")
 public class LeagueEntity implements Serializable, rs.fon.silab.application.model.Entity{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "league_id")
     private Long leagueId;
     @Column(name = "name")

@@ -25,6 +25,9 @@ public class GameConverter implements GenericConverter<GameDto, GameEntity>{
     public GameEntity toEntity(GameDto d) {
        return new GameEntity(d.getGameId(), tc.toEntity(d.getHomeTeam()),d.getHomeTeamGoals(),tc.toEntity(d.getAwayTeam()), d.getAwayTeamGoals());
     }
+    public GameEntity toEntityIdOnly(GameDto d){
+        return new GameEntity(d.getGameId());
+    }
 
    
     @Override

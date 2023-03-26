@@ -14,13 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import rs.fon.silab.application.dto.GameDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
@@ -38,12 +39,13 @@ public class GameRestController {
     @Autowired
     private GameService gameService;
 
-    @GetMapping("games/all")
+
+    @GetMapping("/games")
     public List<GameDto> allGames() {
         return gameService.findAll();
     }
 
-    @GetMapping("games/get/{id}")
+    @GetMapping("/games/game/{id}")
     public ResponseEntity<Object> findById(@PathVariable Long id) {
         Optional<GameDto> entity = gameService.findById(id);
         if (entity.isPresent()) {
@@ -52,17 +54,17 @@ public class GameRestController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid game");
     }
 
-    @GetMapping("{teamName}/homegames/")
+    @GetMapping("homegames/{teamName}/")
     public List<GameDto> findByHomeTeam(@PathVariable String teamName) {
         return gameService.findAllByHomeTeam(teamName);
     }
 
-    @GetMapping("{teamName}/awaygames")
+    @GetMapping("awaygames/{teamName}/")
     public List<GameDto> findByAwayTeam(@PathVariable String teamName) {
         return gameService.findAllByAwayTeam(teamName);
     }
 
-    @GetMapping("{teamName}/games")
+    @GetMapping("/allgames/{teamName}")
     public List<GameDto> findAllGames(@PathVariable String teamName) {
         List<GameDto> games = gameService.findAllByHomeTeam(teamName);
         games.addAll(gameService.findAllByAwayTeam(teamName));
@@ -70,8 +72,8 @@ public class GameRestController {
 
     }
 
-    @PostMapping("games/save")
-    public ResponseEntity<Object> save(@Valid @RequestBody GameDto gameDto) {
+    @PostMapping("/games/game/add")
+    public ResponseEntity<Object> save(@RequestBody GameDto gameDto) {
         try {
             return ResponseEntity.ok(gameService.save(gameDto));
         } catch (EntityExistsException | SameTeamsException ex) {
@@ -79,12 +81,12 @@ public class GameRestController {
         }
     }
 
-    @RequestMapping(value = "games/delete/{id}", method = {RequestMethod.GET, RequestMethod.DELETE})
+    @DeleteMapping("/games/delete/{id}")
     public void delete(@PathVariable Long id) {
         gameService.delete(id);
 
     }
-    @RequestMapping(value = "games/update/{id}", method = {RequestMethod.GET, RequestMethod.PUT})
+    @PutMapping("/games/game/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody GameDto gameDto ){
         try {
             return ResponseEntity.ok(gameService.updateResult(gameDto,id));

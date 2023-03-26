@@ -16,7 +16,7 @@ import rs.fon.silab.application.util.PositionEnum;
 public class PlayerDto implements Dto{
     @NotNull(message= "Player ID is required")
     private Long playerId;
-    @NotNull(message= "Home team is required")
+    @NotNull(message= "Name is required")
     private String name;
     @Schema(defaultValue = "midfielder")
     private PositionEnum position;
@@ -24,6 +24,9 @@ public class PlayerDto implements Dto{
     private int age;
 
     public PlayerDto() {
+    }
+    public PlayerDto(String playerId) {
+        this.playerId = Long.parseLong(playerId);
     }
 
     public PlayerDto(Long playerId, String name, String position, TeamDto team, int age) {

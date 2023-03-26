@@ -29,6 +29,9 @@ public class GameDto implements Dto{
     public GameDto() {
     }
 
+    public GameDto(String gameId) {
+        this.gameId = Long.parseLong(gameId);
+    }
     public GameDto(Long gameId, TeamDto homeTeam, TeamDto awayTeam, int homeTeamGoals, int awayTeamGoals) {
         this.gameId = gameId;
         this.homeTeam = homeTeam;

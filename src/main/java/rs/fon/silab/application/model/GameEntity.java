@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +23,7 @@ import javax.persistence.Table;
 @Table(name="game")
 public class GameEntity implements Serializable,rs.fon.silab.application.model.Entity{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="game_id")
     private Long gameId;
     @ManyToOne
@@ -33,16 +36,13 @@ public class GameEntity implements Serializable,rs.fon.silab.application.model.E
     private TeamEntity away;
     @Column (name="away_goals")
     private int awayTeamGoals;
-//    private Date date; Potrebno i u bazi implementirati date
-    
-//    @OneToMany(mappedBy = "game")
-//    Set<GameGoalscorerEntity> goals;
-    
-//    @ManyToOne
-//    @JoinColumn(name="league", referencedColumnName = "league")
-//    private LeagueEntity league;
     public GameEntity() {
     }
+
+    public GameEntity(Long gameId) {
+        this.gameId = gameId;
+    }
+    
 
     public GameEntity(Long gameId, TeamEntity home, int homeTeamGoals, TeamEntity away, int awayTeamGoals) {
         this.gameId = gameId;

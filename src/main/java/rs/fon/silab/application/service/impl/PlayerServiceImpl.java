@@ -41,11 +41,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public PlayerDto save(PlayerDto playerDto) throws EntityExistsException {
-        Optional<PlayerEntity> entity = playerRepository.findById(playerDto.getPlayerId());
-        if (entity.isPresent()) {
-            throw new EntityExistsException(entity.get(), "Player already exists");
-        }
-        
+  
         return playerConverter.toDto(playerRepository.save(playerConverter.toEntity(playerDto)));
     }
 

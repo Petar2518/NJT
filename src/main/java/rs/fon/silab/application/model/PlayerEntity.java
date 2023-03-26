@@ -10,6 +10,8 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,6 +26,7 @@ import javax.persistence.Table;
 @Table(name="player")
 public class PlayerEntity implements Serializable,rs.fon.silab.application.model.Entity{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="player_id")
     private Long playerId;
     @Column
@@ -40,6 +43,11 @@ public class PlayerEntity implements Serializable,rs.fon.silab.application.model
     public PlayerEntity() {
     }
 
+    public PlayerEntity(Long playerId) {
+        this.playerId = playerId;
+    }
+
+    
     public PlayerEntity(Long playerId, String name, String position, TeamEntity team, int age) {
         this.playerId = playerId;
         this.name = name;

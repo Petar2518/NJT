@@ -30,7 +30,7 @@ public class LeagueTeamsServiceImpl implements LeagueTeamsService{
         this.leagueTeamsConverter = leagueTeamsConverter;
     }
     
-    
+   
 
     @Override
     public LeagueTeamsDto save(LeagueTeamsDto ltDto) throws EntityExistsException {
@@ -76,6 +76,24 @@ public class LeagueTeamsServiceImpl implements LeagueTeamsService{
         lt2Dto.setPoints(ltDto.getPoints());
         return leagueTeamsConverter.toDto(leagueTeamsRepository.save(leagueTeamsConverter.toEntity(lt2Dto)));
         
+    }
+
+    @Override
+    public Optional<LeagueTeamsDto> findByLeagueTeam(Long leagueId, String teamName) {
+        LeagueTeamsEntity.ltId id = new LeagueTeamsEntity.ltId(leagueId, teamName);
+         Optional<LeagueTeamsEntity> entity = leagueTeamsRepository.findById(id);
+        if (entity.isPresent()){
+            return Optional.of(leagueTeamsConverter.toDto(entity.get()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<LeagueTeamsDto> findAll() {
+        List<LeagueTeamsEntity> participants = leagueTeamsRepository.findAll();
+        return participants.stream().map((entity)->{
+        return leagueTeamsConverter.toDto(entity);
+    }).collect(Collectors.toList());
     }
 
     

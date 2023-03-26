@@ -34,6 +34,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public TeamDto save(TeamDto teamDto) throws EntityExistsException {
+        
         Optional<TeamEntity> entity = teamRepository.findById(teamDto.getTeamName());
         if (entity.isPresent()){
             throw new EntityExistsException(entity.get(), "Team already exists.");
@@ -71,7 +72,7 @@ public class TeamServiceImpl implements TeamService{
        Optional<TeamEntity> entity = teamRepository.findById(name);
        if (entity.isPresent()){
            return Optional.of(teamConverter.toDto(entity.get()));
-       }
+    }
        return Optional.empty();
     }
 

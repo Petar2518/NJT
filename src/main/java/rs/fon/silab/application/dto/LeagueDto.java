@@ -23,6 +23,10 @@ public class LeagueDto implements Dto{
 
     public LeagueDto() {
     }
+    
+    public LeagueDto(String leagueId) {
+        this.leagueId = Long.parseLong(leagueId);
+    }
 
     public LeagueDto(Long leagueId, String leagueName, String leagueNation, String leagueDivision) {
         this.leagueId = leagueId;

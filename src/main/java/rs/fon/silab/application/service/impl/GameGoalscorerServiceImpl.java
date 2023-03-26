@@ -36,17 +36,16 @@ public class GameGoalscorerServiceImpl implements GameGoalscorerService {
     private final GameGoalscorerRepository ggRepository;
     private final GameGoalscorerConverter ggConverter;
     private final PlayerService playerService;
-    private final TeamService teamService;
     private final GameService gameService;
 
-    public GameGoalscorerServiceImpl(GameGoalscorerRepository ggRepository, GameGoalscorerConverter ggConverter, PlayerService playerService, TeamService teamService, GameService gameService) {
+    public GameGoalscorerServiceImpl(GameGoalscorerRepository ggRepository, GameGoalscorerConverter ggConverter, PlayerService playerService, GameService gameService) {
         this.ggRepository = ggRepository;
         this.ggConverter = ggConverter;
         this.playerService = playerService;
-        this.teamService = teamService;
         this.gameService = gameService;
     }
 
+    
     @Override
     public GameGoalscorerDto save(GameGoalscorerDto ggDto) throws EntityExistsException, PlayerNotInTeamException, PlayerScoredMoreThanTeamException {
         GameGoalscorerEntity.ggId ggid = new GameGoalscorerEntity.ggId(ggDto.getGame().getGameId(), ggDto.getPlayer().getPlayerId());
@@ -136,12 +135,30 @@ public class GameGoalscorerServiceImpl implements GameGoalscorerService {
         }
         if (team.equals(game.getAwayTeam())) {
             remainingGoalsAway +=goalscorer.get().getGoals();
-            if (ggDto.getGoals() > remainingGoalsAway + goalscorer.get().getGoals()) {
+            if (ggDto.getGoals() > remainingGoalsAway ) {
                 throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getAwayTeamGoals() + "goals and " + (game.getAwayTeamGoals()-remainingGoalsAway) + "of goals have already been assigned to other players.");
             }
         }
         goalscorerD.setGoals(ggDto.getGoals());
         return ggConverter.toDto(ggRepository.save(ggConverter.toEntity(goalscorerD)));
+    }
+
+    @Override
+    public List<GameGoalscorerDto> findAll() {
+        List<GameGoalscorerEntity> games = ggRepository.findAll();
+        return games.stream().map((entity) -> {
+            return ggConverter.toDto(entity);
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<GameGoalscorerDto> findByGamePlayer(Long gameId, Long playerId) {
+        GameGoalscorerEntity.ggId id = new GameGoalscorerEntity.ggId(gameId, playerId);
+         Optional<GameGoalscorerEntity> entity = ggRepository.findById(id);
+        if (entity.isPresent()){
+            return Optional.of(ggConverter.toDto(entity.get()));
+        }
+        return Optional.empty();
     }
     
     
