@@ -68,7 +68,7 @@ public class PlayerRestController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid player");
     }
 
-    @DeleteMapping("/playersdelete/{id}")
+    @DeleteMapping("/players/delete/{id}")
     public void delete(@PathVariable Long id) {
         playerService.delete(id);
     }

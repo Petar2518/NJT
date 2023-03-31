@@ -67,7 +67,7 @@ public class TeamRestController {
         return teamService.findAllByCountry(country);
     }
 
-    @DeleteMapping("delete/{name}")
+    @DeleteMapping("/teams/delete/{name}")
     public void delete(@PathVariable String name) {
         teamService.delete(name);
     }

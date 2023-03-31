@@ -39,7 +39,7 @@ public class TeamEntity implements Serializable, rs.fon.silab.application.model.
         this.city = city;
     }
 
-
+    
 
 
     public String getTeamName() {

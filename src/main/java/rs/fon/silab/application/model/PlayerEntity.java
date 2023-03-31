@@ -5,74 +5,52 @@
 package rs.fon.silab.application.model;
 
 import javax.persistence.Entity;
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import rs.fon.silab.application.util.PositionEnum;
-import javax.persistence.Table;
+
 
 /**
  *
  * @author gg
  */
 @Entity
-@Table(name="player")
-public class PlayerEntity implements Serializable,rs.fon.silab.application.model.Entity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="player_id")
-    private Long playerId;
-    @Column
-    private String name;
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class PlayerEntity extends FootballPersonEntity{
+    
+    
     @Enumerated(EnumType.STRING)
     @Column
     private PositionEnum position;
-    @ManyToOne
-    @JoinColumn(name= "team", referencedColumnName = "name")
-    private TeamEntity team;
-    @Column
-    private int age;
 
     public PlayerEntity() {
     }
 
-    public PlayerEntity(Long playerId) {
-        this.playerId = playerId;
+    public PlayerEntity(PositionEnum position) {
+        super();
+        this.position = position;
     }
 
+    public PlayerEntity(Long id) {
+        super(id);
+    }
     
-    public PlayerEntity(Long playerId, String name, String position, TeamEntity team, int age) {
-        this.playerId = playerId;
-        this.name = name;
-        this.position=PositionEnum.valueOf(position);
-        this.team = team;
-        this.age = age;
+
+    public PlayerEntity( Long id, String name,String position, TeamEntity team, int age) {
+        super(id, name, team, age);
+        this.position = PositionEnum.valueOf(position);
     }
 
-    public Long getPlayerId() {
-        return playerId;
+    public PlayerEntity(String position, Long id) {
+        super(id);
+        this.position = PositionEnum.valueOf(position);
     }
 
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPosition() {
+     public String getPosition() {
         return this.position.name();
     }
 
@@ -80,30 +58,10 @@ public class PlayerEntity implements Serializable,rs.fon.silab.application.model
         this.position = PositionEnum.valueOf(position);
     }
 
-    public TeamEntity getTeam() {
-        return team;
-    }
-
-    public void setTeam(TeamEntity team) {
-        this.team = team;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.playerId);
-        hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + Objects.hashCode(this.position);
-        hash = 97 * hash + Objects.hashCode(this.team);
-        hash = 97 * hash + this.age;
+        hash = 59 * hash + Objects.hashCode(this.position);
         return hash;
     }
 
@@ -119,27 +77,16 @@ public class PlayerEntity implements Serializable,rs.fon.silab.application.model
             return false;
         }
         final PlayerEntity other = (PlayerEntity) obj;
-        if (this.age != other.age) {
-            return false;
-        }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.team, other.team)) {
-            return false;
-        }
-        if (!Objects.equals(this.playerId, other.playerId)) {
-            return false;
-        }
         return this.position == other.position;
     }
 
     @Override
     public String toString() {
-        return "PlayerEntity{" + "playerId=" + playerId + ", name=" + name + ", position=" + position + ", team=" + team + ", age=" + age + '}';
+        return "PlayerEntity{" + "position=" + position + '}';
     }
     
-      
+    
+    
     
 }
 
