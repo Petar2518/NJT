@@ -71,7 +71,7 @@ public class TeamRestController {
     public void delete(@PathVariable String name) {
         teamService.delete(name);
     }
-    @PutMapping("/team/{name}")
+    @PutMapping("teams/team/{name}")
     public ResponseEntity<Object> update(@PathVariable String name, @RequestBody TeamDto teamDto){
         try {
             return ResponseEntity.ok(teamService.updateLocation(teamDto, name));
