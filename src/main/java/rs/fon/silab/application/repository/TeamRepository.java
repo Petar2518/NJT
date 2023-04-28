@@ -24,5 +24,5 @@ public interface TeamRepository extends JpaRepository<TeamEntity, Long>{
     List<TeamEntity> findAllByCity(String city);
     
     List<TeamEntity> findAllByTeamName(String name);
-    
+
 }

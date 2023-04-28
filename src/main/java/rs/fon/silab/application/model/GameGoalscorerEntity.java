@@ -198,4 +198,4 @@ public class GameGoalscorerEntity implements Serializable,rs.fon.silab.applicati
 
     }
 
-}
+    }
