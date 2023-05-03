@@ -21,6 +21,7 @@ import rs.fon.silab.application.dto.LeagueTeamsDto;
 import rs.fon.silab.application.dto.TeamDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
+import rs.fon.silab.application.exception.NoMutualLeaguesException;
 import rs.fon.silab.application.exception.SameTeamsException;
 import rs.fon.silab.application.model.GameEntity;
 import rs.fon.silab.application.repository.GameRepository;
@@ -49,10 +50,17 @@ public class GameServiceImpl implements GameService {
    
 
     @Override
-    public GameDto save(GameDto gameDto) throws EntityExistsException, SameTeamsException {
+    public GameDto save(GameDto gameDto) throws EntityExistsException, SameTeamsException, NoMutualLeaguesException {
         LeagueDto league  = gameDto.getLeague();
         TeamDto homeTeam = gameDto.getHomeTeam();
         TeamDto awayTeam = gameDto.getAwayTeam();
+        List<TeamDto> teams = ltService.findAllTeams(gameDto.getLeague().getLeagueId()).stream().map((entity)->{
+            return entity.getTeam();
+        }).collect(Collectors.toList());
+        if (!(teams.contains(homeTeam) && teams.contains(awayTeam))){
+            throw new NoMutualLeaguesException(gameDto, "Teams arent participating in given league");
+        }
+        
         int homeGoals = gameDto.getHomeTeamGoals();
         int awayGoals = gameDto.getAwayTeamGoals();
          try {

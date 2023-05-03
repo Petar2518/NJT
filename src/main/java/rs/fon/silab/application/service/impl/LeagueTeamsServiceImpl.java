@@ -4,6 +4,7 @@
  */
 package rs.fon.silab.application.service.impl;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,7 +25,8 @@ import rs.fon.silab.application.service.LeagueTeamsService;
  */
 @Service
 
-public class LeagueTeamsServiceImpl implements LeagueTeamsService{
+public class LeagueTeamsServiceImpl implements LeagueTeamsService {
+
     private final LeagueTeamsRepository leagueTeamsRepository;
     private final LeagueTeamsConverter leagueTeamsConverter;
 
@@ -32,14 +34,12 @@ public class LeagueTeamsServiceImpl implements LeagueTeamsService{
         this.leagueTeamsRepository = leagueTeamsRepository;
         this.leagueTeamsConverter = leagueTeamsConverter;
     }
-    
-   
 
     @Override
     public LeagueTeamsDto save(LeagueTeamsDto ltDto) throws EntityExistsException {
         LeagueTeamsEntity.ltId id = new LeagueTeamsEntity.ltId(ltDto.getLeague().getLeagueId(), ltDto.getTeam().getTeamId());
         Optional<LeagueTeamsEntity> entity = leagueTeamsRepository.findById(id);
-        if (entity.isPresent()){
+        if (entity.isPresent()) {
             throw new EntityExistsException(entity, "Given team is already in given league.");
         }
         return leagueTeamsConverter.toDto(leagueTeamsRepository.save(leagueTeamsConverter.toEntity(ltDto)));
@@ -48,18 +48,33 @@ public class LeagueTeamsServiceImpl implements LeagueTeamsService{
     @Override
     public List<LeagueTeamsDto> findAllTeams(Long leagueId) {
         List<LeagueTeamsEntity> teams = leagueTeamsRepository.findAllByIdLeagueId(leagueId);
-        return teams.stream().map((entity)->{
+        return teams.stream().map((entity) -> {
             return leagueTeamsConverter.toDto(entity);
         }).collect(Collectors.toList());
-        
+
     }
 
     @Override
     public List<LeagueTeamsDto> findAllLeagues(Long teamId) {
         List<LeagueTeamsEntity> teams = leagueTeamsRepository.findAllByIdTeamId(teamId);
-        return teams.stream().map((entity)->{
+        return teams.stream().map((entity) -> {
             return leagueTeamsConverter.toDto(entity);
         }).collect(Collectors.toList());
+    }
+
+    public List<LeagueTeamsDto> findMutualLeagues(Long team1, Long team2) {
+        List<LeagueTeamsEntity> teams1 = leagueTeamsRepository.findAllByIdTeamId(team1);
+        List<LeagueTeamsEntity> teams2 = leagueTeamsRepository.findAllByIdTeamId(team2);
+        List<LeagueTeamsEntity> teams = new LinkedList<>();
+        for (LeagueTeamsEntity team : teams2) {
+            if (teams1.contains(team)) {
+                teams.add(team);
+            }
+            
+        }
+            return teams.stream().map((entity) -> {
+                return leagueTeamsConverter.toDto(entity);
+            }).collect(Collectors.toList());
     }
 
     @Override
@@ -69,23 +84,23 @@ public class LeagueTeamsServiceImpl implements LeagueTeamsService{
     }
 
     @Override
-    public LeagueTeamsDto update(LeagueTeamsDto ltDto, Long leagueId, Long teamId) throws EntityDoesntExistException{
+    public LeagueTeamsDto update(LeagueTeamsDto ltDto, Long leagueId, Long teamId) throws EntityDoesntExistException {
         LeagueTeamsEntity.ltId id = new LeagueTeamsEntity.ltId(leagueId, teamId);
         Optional<LeagueTeamsEntity> entity = leagueTeamsRepository.findById(id);
-        if (entity.isEmpty()){
+        if (entity.isEmpty()) {
             throw new EntityDoesntExistException(entity, "Given team is already in given league.");
         }
         LeagueTeamsDto lt2Dto = leagueTeamsConverter.toDto(entity.get());
         lt2Dto.setPoints(ltDto.getPoints());
         return leagueTeamsConverter.toDto(leagueTeamsRepository.save(leagueTeamsConverter.toEntity(lt2Dto)));
-        
+
     }
 
     @Override
     public Optional<LeagueTeamsDto> findByLeagueTeam(Long leagueId, Long teamId) {
         LeagueTeamsEntity.ltId id = new LeagueTeamsEntity.ltId(leagueId, teamId);
-         Optional<LeagueTeamsEntity> entity = leagueTeamsRepository.findById(id);
-        if (entity.isPresent()){
+        Optional<LeagueTeamsEntity> entity = leagueTeamsRepository.findById(id);
+        if (entity.isPresent()) {
             return Optional.of(leagueTeamsConverter.toDto(entity.get()));
         }
         return Optional.empty();
@@ -94,10 +109,9 @@ public class LeagueTeamsServiceImpl implements LeagueTeamsService{
     @Override
     public List<LeagueTeamsDto> findAll() {
         List<LeagueTeamsEntity> participants = leagueTeamsRepository.findAll();
-        return participants.stream().map((entity)->{
-        return leagueTeamsConverter.toDto(entity);
-    }).collect(Collectors.toList());
+        return participants.stream().map((entity) -> {
+            return leagueTeamsConverter.toDto(entity);
+        }).collect(Collectors.toList());
     }
 
-    
 }

@@ -72,6 +72,11 @@ public class LeagueTeamsRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+    
+    @GetMapping("mutualleagues/{team1}/{team2}")
+    public List<LeagueTeamsDto> findAllLeagues(@PathVariable Long team1,@PathVariable Long team2) {
+        return ltService.findMutualLeagues(team1, team2);
+    }
 
     @DeleteMapping(value = "delete/{league}/{team}")
     public void delete(@PathVariable Long league, @PathVariable Long team) {

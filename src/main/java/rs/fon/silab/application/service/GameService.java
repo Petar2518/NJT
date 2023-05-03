@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rs.fon.silab.application.dto.GameDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
+import rs.fon.silab.application.exception.NoMutualLeaguesException;
 import rs.fon.silab.application.exception.SameTeamsException;
 
 /**
@@ -19,7 +20,7 @@ import rs.fon.silab.application.exception.SameTeamsException;
 @Transactional
 public interface GameService {
 
-    GameDto save(GameDto gameDto) throws EntityExistsException, SameTeamsException;
+    GameDto save(GameDto gameDto) throws NoMutualLeaguesException, EntityExistsException, SameTeamsException;
 
     List<GameDto> findAll();
 
