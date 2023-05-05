@@ -17,12 +17,12 @@ import rs.fon.silab.application.model.TeamEntity;
  */
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface TeamRepository extends JpaRepository<TeamEntity, Long>{
+public interface TeamRepository extends JpaRepository<TeamEntity, Long> {
 
     List<TeamEntity> findAllByCountry(String country);
 
     List<TeamEntity> findAllByCity(String city);
-    
+
     List<TeamEntity> findAllByTeamName(String name);
 
 }

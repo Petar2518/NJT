@@ -105,6 +105,4 @@ public class GameGoalscorerDto implements Dto {
         return "GameGoalscorerDto{" + "game=" + game + ", player=" + player + ", goals=" + goals + ", team=" + team + '}';
     }
 
-    
-    
 }

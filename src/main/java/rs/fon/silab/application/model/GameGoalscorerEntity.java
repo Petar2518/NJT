@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package rs.fon.silab.application.model;
+
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -13,28 +14,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+
 /**
  *
  * @author gg
  */
-@Entity 
+@Entity
 @Table(name = "game_goalscorer")
-public class GameGoalscorerEntity implements Serializable,rs.fon.silab.application.model.Entity{
-    
+public class GameGoalscorerEntity implements Serializable, rs.fon.silab.application.model.Entity {
+
     @EmbeddedId
     ggId id;
     @ManyToOne
     @MapsId("gameId")
-    @JoinColumn(name="game_id")
+    @JoinColumn(name = "game_id")
     private GameEntity game;
     @ManyToOne
     @MapsId("playerId")
-    @JoinColumn(name="player_id")
+    @JoinColumn(name = "player_id")
     private PlayerEntity player;
-    @Column(name="goals")
+    @Column(name = "goals")
     private int goals;
     @ManyToOne
-    @JoinColumn(name= "team", referencedColumnName = "team_id")
+    @JoinColumn(name = "team", referencedColumnName = "team_id")
     private TeamEntity team;
 
     public GameGoalscorerEntity() {
@@ -47,8 +49,6 @@ public class GameGoalscorerEntity implements Serializable,rs.fon.silab.applicati
         this.goals = goals;
         this.team = team;
     }
-
-    
 
     public ggId getId() {
         return id;
@@ -132,17 +132,13 @@ public class GameGoalscorerEntity implements Serializable,rs.fon.silab.applicati
     public String toString() {
         return "GameGoalscorerEntity{" + "id=" + id + ", game=" + game + ", player=" + player + ", goals=" + goals + ", team=" + team + '}';
     }
-    
-
-    
-    
 
     @Embeddable
-    public static class ggId implements Serializable{
-        
-        @Column(name= "game_id")
+    public static class ggId implements Serializable {
+
+        @Column(name = "game_id")
         private Long gameId;
-        @Column(name="player_id")
+        @Column(name = "player_id")
         private Long playerId;
 
         public ggId() {
@@ -194,8 +190,7 @@ public class GameGoalscorerEntity implements Serializable,rs.fon.silab.applicati
             }
             return Objects.equals(this.playerId, other.playerId);
         }
-        
 
     }
 
-    }
+}

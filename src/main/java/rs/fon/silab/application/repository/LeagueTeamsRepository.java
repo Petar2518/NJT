@@ -17,8 +17,8 @@ import rs.fon.silab.application.model.LeagueTeamsEntity;
  */
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface LeagueTeamsRepository extends JpaRepository<LeagueTeamsEntity, LeagueTeamsEntity.ltId>{
-    
+public interface LeagueTeamsRepository extends JpaRepository<LeagueTeamsEntity, LeagueTeamsEntity.ltId> {
+
     List<LeagueTeamsEntity> findAllByIdLeagueId(Long leagueId);
 
     List<LeagueTeamsEntity> findAllByIdTeamId(Long teamId);

@@ -14,26 +14,28 @@ import rs.fon.silab.application.model.GameEntity;
  * @author gg
  */
 @Component
-public class GameConverter implements GenericConverter<GameDto, GameEntity>{
+public class GameConverter implements GenericConverter<GameDto, GameEntity> {
+
     private final TeamConverter tc;
     private final LeagueConverter lc;
+
     @Autowired
-     public GameConverter(TeamConverter tc,LeagueConverter lc) {
-         this.tc=tc;
-         this.lc=lc;
+    public GameConverter(TeamConverter tc, LeagueConverter lc) {
+        this.tc = tc;
+        this.lc = lc;
     }
-     
+
     @Override
     public GameEntity toEntity(GameDto d) {
-       return new GameEntity(d.getGameId(), tc.toEntity(d.getHomeTeam()),d.getHomeTeamGoals(),tc.toEntity(d.getAwayTeam()), d.getAwayTeamGoals(), lc.toEntity(d.getLeague()));
+        return new GameEntity(d.getGameId(), tc.toEntity(d.getHomeTeam()), d.getHomeTeamGoals(), tc.toEntity(d.getAwayTeam()), d.getAwayTeamGoals(), lc.toEntity(d.getLeague()));
     }
-    public GameEntity toEntityIdOnly(GameDto d){
+
+    public GameEntity toEntityIdOnly(GameDto d) {
         return new GameEntity(d.getGameId());
     }
 
-   
     @Override
     public GameDto toDto(GameEntity e) {
-       return new GameDto(e.getGameId(), tc.toDto(e.getHome()),tc.toDto(e.getAway()),e.getHomeTeamGoals(),e.getAwayTeamGoals(), lc.toDto(e.getLeague()));
+        return new GameDto(e.getGameId(), tc.toDto(e.getHome()), tc.toDto(e.getAway()), e.getHomeTeamGoals(), e.getAwayTeamGoals(), lc.toDto(e.getLeague()));
     }
 }

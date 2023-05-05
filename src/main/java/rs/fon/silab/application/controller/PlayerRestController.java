@@ -34,9 +34,8 @@ import rs.fon.silab.application.service.PlayerService;
  *
  * @author gg
  */
-
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping
 public class PlayerRestController {
 
@@ -47,18 +46,22 @@ public class PlayerRestController {
     public List<PlayerDto> findPlayersByTeam(@PathVariable String team) {
         return playerService.findAllByTeam(team);
     }
+
     @GetMapping("youngerthan/{age}")
     public List<PlayerDto> findPlayersYoungerThan(@PathVariable int age) {
         return playerService.findByAgeLessThanEqual(age);
     }
+
     @GetMapping("olderthan/{age}")
     public List<PlayerDto> findPlayersOlderThan(@PathVariable int age) {
         return playerService.findByAgeGreaterThan(age);
     }
-     @GetMapping("/players")
-    public List<PlayerDto> findAll(){
+
+    @GetMapping("/players")
+    public List<PlayerDto> findAll() {
         return playerService.findAll();
     }
+
     @GetMapping("/players/player/{id}")
     public ResponseEntity<Object> findById(@PathVariable Long id) {
         Optional<PlayerDto> entity = playerService.findById(id);
@@ -72,28 +75,40 @@ public class PlayerRestController {
     public void delete(@PathVariable Long id) {
         playerService.delete(id);
     }
+
     @PutMapping("/players/player/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody PlayerDto playerDto){
+    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody PlayerDto playerDto) {
         try {
             return ResponseEntity.ok(playerService.updateInfo(playerDto, id));
         } catch (EntityDoesntExistException ex) {
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
+    @PostMapping("/team/{team}/player/add")
+    public ResponseEntity<Object> saveTeam(@RequestBody PlayerDto playerDto) {
+
+        try {
+
+            return ResponseEntity.ok(playerService.save(playerDto));
+        } catch (EntityExistsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+
+    }
+
     @PostMapping("/players/player/add")
     public ResponseEntity<Object> save(@RequestBody PlayerDto playerDto) {
-        {
-                System.out.println(playerDto.getPlayerId());
-                System.out.println(playerDto.getName());
-            try {
-                
-                return ResponseEntity.ok(playerService.save(playerDto));
-            } catch (EntityExistsException ex) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-            }
+
+        try {
+
+            return ResponseEntity.ok(playerService.save(playerDto));
+        } catch (EntityExistsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+
         }
     }
-   
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleError(MethodArgumentNotValidException ex) {
         Map<String, String> map = new HashMap<>();

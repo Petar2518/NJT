@@ -15,14 +15,13 @@ import rs.fon.silab.application.exception.EntityExistsException;
  *
  * @author gg
  */
-
 @Transactional
 public interface TeamService {
 
     TeamDto save(TeamDto teamDto) throws EntityExistsException;
 
     public Optional<TeamDto> findById(Long id);
-    
+
     List<TeamDto> findAll();
 
     List<TeamDto> findAllByCountry(String country);
@@ -33,7 +32,6 @@ public interface TeamService {
 
     TeamDto updateLocation(TeamDto teamDto, Long id) throws EntityDoesntExistException;
 
-     
     void delete(Long id);
-    
+
 }

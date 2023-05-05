@@ -5,9 +5,7 @@
 package rs.fon.silab.application.model;
 
 import java.io.Serializable;
-
 import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,13 +13,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.Table;
+
 /**
  *
  * @author gg
  */
 @Entity
-@Table(name="league")
-public class LeagueEntity implements Serializable, rs.fon.silab.application.model.Entity{
+@Table(name = "league")
+public class LeagueEntity implements Serializable, rs.fon.silab.application.model.Entity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "league_id")
@@ -53,8 +53,6 @@ public class LeagueEntity implements Serializable, rs.fon.silab.application.mode
     public void setSeason(String season) {
         this.season = season;
     }
-
-   
 
     public Long getLeagueId() {
         return leagueId;
@@ -131,9 +129,4 @@ public class LeagueEntity implements Serializable, rs.fon.silab.application.mode
         return "LeagueEntity{" + "leagueId=" + leagueId + ", leagueName=" + leagueName + ", leagueNation=" + leagueNation + ", leagueDivision=" + leagueDivision + ", season=" + season + '}';
     }
 
-    
-
-   
-
-    
 }

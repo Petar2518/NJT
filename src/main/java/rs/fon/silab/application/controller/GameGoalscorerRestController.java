@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.fon.silab.application.dto.GameGoalscorerDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
@@ -41,22 +40,33 @@ public class GameGoalscorerRestController {
     GameGoalscorerService ggService;
 
     @GetMapping("goalscorers")
-    public List<GameGoalscorerDto> findAll(){
+    public List<GameGoalscorerDto> findAll() {
         return ggService.findAll();
     }
+
+    @PostMapping("game/goalscorer/add/{game}")
+    public ResponseEntity<Object> saveGame(@Valid @RequestBody GameGoalscorerDto ggDto, @PathVariable Long game) {
+        try {
+            return ResponseEntity.ok(ggService.save(ggDto));
+        } catch (EntityExistsException | PlayerNotInTeamException | PlayerScoredMoreThanTeamException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+    }
+
     @GetMapping("gamegoalscorers/{game}/")
     public List<GameGoalscorerDto> findAllGoalscorers(@PathVariable Long game) {
         return ggService.findAllGoalscorers(game);
     }
+
     @GetMapping("playergoals/{player}/")
-    public List<GameGoalscorerDto> findAllGamesScored(@PathVariable Long player){
+    public List<GameGoalscorerDto> findAllGamesScored(@PathVariable Long player) {
         return ggService.findAllGamesScored(player);
     }
 
     @GetMapping("goalscorers/{game}/{player}")
-    public ResponseEntity<Object> findById(@PathVariable Long game, @PathVariable Long player){
-        Optional<GameGoalscorerDto> entity = ggService.findByGamePlayer(game,player);
-        if(entity.isPresent()){
+    public ResponseEntity<Object> findById(@PathVariable Long game, @PathVariable Long player) {
+        Optional<GameGoalscorerDto> entity = ggService.findByGamePlayer(game, player);
+        if (entity.isPresent()) {
             return ResponseEntity.ok(entity.get());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid league");
@@ -70,21 +80,22 @@ public class GameGoalscorerRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
-    
+
     @DeleteMapping(value = "goalscorers/delete/{game}/{player}")
-    public void delete(@PathVariable Long game,@PathVariable Long player) {
+    public void delete(@PathVariable Long game, @PathVariable Long player) {
         ggService.delete(game, player);
 
     }
-    
+
     @PutMapping(value = "goalscorers/goalscorer/{game}/{player}")
-    public ResponseEntity<Object> update(@PathVariable Long game,@PathVariable Long player, @RequestBody GameGoalscorerDto goalscorerDto){
+    public ResponseEntity<Object> update(@PathVariable Long game, @PathVariable Long player, @RequestBody GameGoalscorerDto goalscorerDto) {
         try {
             return ResponseEntity.ok(ggService.update(goalscorerDto, game, player));
         } catch (EntityDoesntExistException | PlayerScoredMoreThanTeamException ex) {
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleError(MethodArgumentNotValidException ex) {
         Map<String, String> map = new HashMap<>();

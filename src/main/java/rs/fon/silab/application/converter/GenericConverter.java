@@ -11,9 +11,10 @@ import rs.fon.silab.application.model.Entity;
  *
  * @author gg
  */
-public interface GenericConverter <dto extends Dto, entity extends Entity>{
+public interface GenericConverter<dto extends Dto, entity extends Entity> {
+
     entity toEntity(dto d);
-    
+
     dto toDto(entity e);
-    
+
 }

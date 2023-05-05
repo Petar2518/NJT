@@ -9,5 +9,5 @@ package rs.fon.silab.application.model;
  * @author gg
  */
 public interface Entity {
-    
+
 }

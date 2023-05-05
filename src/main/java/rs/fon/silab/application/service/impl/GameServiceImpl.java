@@ -10,10 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import rs.fon.silab.application.converter.GameConverter;
 import rs.fon.silab.application.dto.GameDto;
 import rs.fon.silab.application.dto.LeagueDto;
@@ -47,42 +44,40 @@ public class GameServiceImpl implements GameService {
         this.ltService = ltService;
     }
 
-   
-
     @Override
     public GameDto save(GameDto gameDto) throws EntityExistsException, SameTeamsException, NoMutualLeaguesException {
-        LeagueDto league  = gameDto.getLeague();
+        LeagueDto league = gameDto.getLeague();
         TeamDto homeTeam = gameDto.getHomeTeam();
         TeamDto awayTeam = gameDto.getAwayTeam();
-        List<TeamDto> teams = ltService.findAllTeams(gameDto.getLeague().getLeagueId()).stream().map((entity)->{
+        List<TeamDto> teams = ltService.findAllTeams(gameDto.getLeague().getLeagueId()).stream().map((entity) -> {
             return entity.getTeam();
         }).collect(Collectors.toList());
-        if (!(teams.contains(homeTeam) && teams.contains(awayTeam))){
+        if (!(teams.contains(homeTeam) && teams.contains(awayTeam))) {
             throw new NoMutualLeaguesException(gameDto, "Teams arent participating in given league");
         }
-        
+
         int homeGoals = gameDto.getHomeTeamGoals();
         int awayGoals = gameDto.getAwayTeamGoals();
-         try {
-        if (homeGoals>awayGoals){
-            LeagueTeamsDto points = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
-            points.setPoints(points.getPoints()+3);
-            ltService.update(points, league.getLeagueId(), homeTeam.getTeamId());
-            }else if(homeGoals<awayGoals){
-            LeagueTeamsDto points = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
-            points.setPoints(points.getPoints()+3);
-            ltService.update(points, league.getLeagueId(), awayTeam.getTeamId());
-        }else{
-            LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
-            LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
-            pointsAway.setPoints(pointsAway.getPoints()+1);
-            pointsHome.setPoints(pointsHome.getPoints()+1);
-             ltService.update(pointsAway, league.getLeagueId(), homeTeam.getTeamId());
-             ltService.update(pointsHome, league.getLeagueId(), awayTeam.getTeamId());
-        }
-         }catch (EntityDoesntExistException ex) {
-                Logger.getLogger(GameServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            if (homeGoals > awayGoals) {
+                LeagueTeamsDto points = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                points.setPoints(points.getPoints() + 3);
+                ltService.update(points, league.getLeagueId(), homeTeam.getTeamId());
+            } else if (homeGoals < awayGoals) {
+                LeagueTeamsDto points = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                points.setPoints(points.getPoints() + 3);
+                ltService.update(points, league.getLeagueId(), awayTeam.getTeamId());
+            } else {
+                LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                pointsAway.setPoints(pointsAway.getPoints() + 1);
+                pointsHome.setPoints(pointsHome.getPoints() + 1);
+                ltService.update(pointsAway, league.getLeagueId(), homeTeam.getTeamId());
+                ltService.update(pointsHome, league.getLeagueId(), awayTeam.getTeamId());
             }
+        } catch (EntityDoesntExistException ex) {
+            Logger.getLogger(GameServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return gameConverter.toDto(gameRepository.save(gameConverter.toEntity(gameDto)));
     }
 
@@ -120,17 +115,99 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws EntityDoesntExistException {
+        Optional<GameEntity> game = gameRepository.findById(id);
+        GameDto gameD = gameConverter.toDto(game.get());
+        LeagueDto league = gameD.getLeague();
+        TeamDto homeTeam = gameD.getHomeTeam();
+        TeamDto awayTeam = gameD.getAwayTeam();
+        int htGoals = gameD.getHomeTeamGoals();
+        int atGoals = gameD.getAwayTeamGoals();
+        if (htGoals > atGoals) {
+            LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+            pointsHome.setPoints(pointsHome.getPoints() - 3);
+            ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+        } else if (htGoals == atGoals) {
+            LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+            pointsHome.setPoints(pointsHome.getPoints() - 1);
+            ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+            LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+            pointsAway.setPoints(pointsAway.getPoints() - 1);
+            ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+        } else {
+            LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+            pointsAway.setPoints(pointsAway.getPoints() - 3);
+            ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+        }
         gameRepository.deleteById(id);
     }
 
     @Override
     public GameDto updateResult(GameDto gameDto, Long id) throws EntityDoesntExistException {
         Optional<GameEntity> game = gameRepository.findById(id);
-        if (game.isEmpty()){
-            throw new EntityDoesntExistException(gameDto,"Entity with given id doesnt exist.");
+        if (game.isEmpty()) {
+            throw new EntityDoesntExistException(gameDto, "Entity with given id doesnt exist.");
         }
-        GameDto gameD=gameConverter.toDto(game.get());
+        GameDto gameD = gameConverter.toDto(game.get());
+        LeagueDto league = gameDto.getLeague();
+        TeamDto homeTeam = gameDto.getHomeTeam();
+        TeamDto awayTeam = gameDto.getAwayTeam();
+        int htGoals = gameD.getHomeTeamGoals();
+        int htNew = gameDto.getHomeTeamGoals();
+        int atGoals = gameD.getAwayTeamGoals();
+        int atNew = gameDto.getAwayTeamGoals();
+        if (htGoals > atGoals) {
+            if (htNew > atNew) {
+            } else if (htNew == atNew) {
+                LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                pointsHome.setPoints(pointsHome.getPoints() - 2);
+                ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+                LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                pointsAway.setPoints(pointsAway.getPoints() + 1);
+                ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+            } else {
+                LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                pointsHome.setPoints(pointsHome.getPoints() - 3);
+                ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+                LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                pointsAway.setPoints(pointsAway.getPoints() + 3);
+                ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+            }
+        } else if (htGoals == atGoals) {
+            if (htNew == atNew) {
+            } else if (htNew > atNew) {
+                LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                pointsHome.setPoints(pointsHome.getPoints() + 2);
+                ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+                LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                pointsAway.setPoints(pointsAway.getPoints() - 1);
+                ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+            } else {
+                LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                pointsHome.setPoints(pointsHome.getPoints() - 1);
+                ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+                LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                pointsAway.setPoints(pointsAway.getPoints() + 2);
+                ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+            }
+        } else {
+            if (htNew < atNew) {
+            } else if (htNew == atNew) {
+                LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                pointsHome.setPoints(pointsHome.getPoints() + 2);
+                ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+                LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                pointsAway.setPoints(pointsAway.getPoints() - 1);
+                ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+            } else {
+                LeagueTeamsDto pointsHome = ltService.findByLeagueTeam(league.getLeagueId(), homeTeam.getTeamId()).get();
+                pointsHome.setPoints(pointsHome.getPoints() + 3);
+                ltService.update(pointsHome, league.getLeagueId(), homeTeam.getTeamId());
+                LeagueTeamsDto pointsAway = ltService.findByLeagueTeam(league.getLeagueId(), awayTeam.getTeamId()).get();
+                pointsAway.setPoints(pointsAway.getPoints() - 3);
+                ltService.update(pointsAway, league.getLeagueId(), awayTeam.getTeamId());
+            }
+        }
         gameD.setHomeTeamGoals(gameDto.getHomeTeamGoals());
         gameD.setAwayTeamGoals(gameDto.getAwayTeamGoals());
         return gameConverter.toDto(gameRepository.save(gameConverter.toEntity(gameD)));

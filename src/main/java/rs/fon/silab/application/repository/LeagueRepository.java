@@ -17,12 +17,12 @@ import rs.fon.silab.application.model.LeagueEntity;
  */
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface LeagueRepository extends JpaRepository<LeagueEntity, Long>{
+public interface LeagueRepository extends JpaRepository<LeagueEntity, Long> {
 
     public List<LeagueEntity> findAllByLeagueNation(String nation);
 
     public List<LeagueEntity> findAllByLeagueDivision(String division);
 
     public List<LeagueEntity> findAllByLeagueName(String name);
-    
+
 }

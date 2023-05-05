@@ -16,25 +16,21 @@ import rs.fon.silab.application.model.TeamEntity;
  * @author gg
  */
 @Component
-public class TeamConverter implements GenericConverter<TeamDto, TeamEntity>{
-    
-
+public class TeamConverter implements GenericConverter<TeamDto, TeamEntity> {
 
     @Override
     public TeamEntity toEntity(TeamDto d) {
-        return new TeamEntity(d.getTeamId(),d.getTeamName(), d.getCountry(), d.getCity());
+        return new TeamEntity(d.getTeamId(), d.getTeamName(), d.getCountry(), d.getCity());
     }
 
-   public TeamEntity toEntityIdOnly(TeamDto d){
+    public TeamEntity toEntityIdOnly(TeamDto d) {
         return new TeamEntity(d.getTeamId());
     }
-
 
     @Override
     public TeamDto toDto(TeamEntity e) {
         List<PlayerDto> players = new ArrayList<>();
-        return new TeamDto(e.getTeamId(),e.getTeamName(),e.getCountry(),e.getCity(),players);
+        return new TeamDto(e.getTeamId(), e.getTeamName(), e.getCountry(), e.getCity(), players);
     }
 
-    
 }

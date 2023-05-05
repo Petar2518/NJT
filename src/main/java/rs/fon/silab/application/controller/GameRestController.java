@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,11 +23,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.fon.silab.application.dto.GameDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
 import rs.fon.silab.application.exception.EntityExistsException;
+import rs.fon.silab.application.exception.NoMutualLeaguesException;
 import rs.fon.silab.application.exception.SameTeamsException;
 import rs.fon.silab.application.service.GameService;
 
@@ -38,7 +40,6 @@ public class GameRestController {
 
     @Autowired
     private GameService gameService;
-
 
     @GetMapping("/games")
     public List<GameDto> allGames() {
@@ -76,22 +77,28 @@ public class GameRestController {
     public ResponseEntity<Object> save(@RequestBody GameDto gameDto) {
         try {
             return ResponseEntity.ok(gameService.save(gameDto));
-        } catch (EntityExistsException | SameTeamsException ex) {
+        } catch (EntityExistsException | SameTeamsException | NoMutualLeaguesException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 
     @DeleteMapping("/games/delete/{id}")
     public void delete(@PathVariable Long id) {
-        gameService.delete(id);
+
+        try {
+            gameService.delete(id);
+        } catch (EntityDoesntExistException ex) {
+            Logger.getLogger(GameRestController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
+
     @PutMapping("/games/game/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody GameDto gameDto ){
+    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody GameDto gameDto) {
         try {
-            return ResponseEntity.ok(gameService.updateResult(gameDto,id));
+            return ResponseEntity.ok(gameService.updateResult(gameDto, id));
         } catch (EntityDoesntExistException ex) {
-             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 
@@ -105,5 +112,5 @@ public class GameRestController {
         });
         return map;
     }
-    
+
 }

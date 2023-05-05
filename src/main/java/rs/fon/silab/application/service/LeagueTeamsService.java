@@ -31,6 +31,5 @@ public interface LeagueTeamsService {
     LeagueTeamsDto update(LeagueTeamsDto ltDto, Long leagueId, Long teamId) throws EntityDoesntExistException;
 
     Optional<LeagueTeamsDto> findByLeagueTeam(Long leagueId, Long teamId);
-    
-    List<LeagueTeamsDto> findMutualLeagues(Long team1, Long team2);
+
 }

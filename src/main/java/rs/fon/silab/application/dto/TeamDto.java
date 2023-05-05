@@ -120,6 +120,4 @@ public class TeamDto implements Dto {
         return "TeamDto{" + "teamId=" + teamId + ", teamName=" + teamName + ", country=" + country + ", city=" + city + ", players=" + players + '}';
     }
 
-    
-
 }

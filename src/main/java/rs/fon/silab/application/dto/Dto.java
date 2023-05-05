@@ -9,5 +9,5 @@ package rs.fon.silab.application.dto;
  * @author gg
  */
 public interface Dto {
-    
+
 }

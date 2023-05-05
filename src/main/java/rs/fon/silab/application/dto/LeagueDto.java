@@ -4,7 +4,6 @@
  */
 package rs.fon.silab.application.dto;
 
-
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
@@ -12,19 +11,19 @@ import javax.validation.constraints.NotNull;
  *
  * @author gg
  */
-public class LeagueDto implements Dto{
-    @NotNull(message="League ID is required")
+public class LeagueDto implements Dto {
+
+    @NotNull(message = "League ID is required")
     private Long leagueId;
-    @NotNull(message="League name is required")
+    @NotNull(message = "League name is required")
     private String leagueName;
     private String leagueNation;
     private String leagueDivision;
     private String season;
 
-
     public LeagueDto() {
     }
-    
+
     public LeagueDto(String leagueId) {
         this.leagueId = Long.parseLong(leagueId);
     }
@@ -36,10 +35,6 @@ public class LeagueDto implements Dto{
         this.leagueDivision = leagueDivision;
         this.season = season;
     }
-
-    
-    
-
 
     public Long getLeagueId() {
         return leagueId;
@@ -123,11 +118,5 @@ public class LeagueDto implements Dto{
     public String toString() {
         return "LeagueDto{" + "leagueId=" + leagueId + ", leagueName=" + leagueName + ", leagueNation=" + leagueNation + ", leagueDivision=" + leagueDivision + ", season=" + season + '}';
     }
-    
- 
 
-    
-
-   
-    
 }

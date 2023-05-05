@@ -19,20 +19,19 @@ import rs.fon.silab.application.exception.PlayerScoredMoreThanTeamException;
  */
 @Transactional
 public interface GameGoalscorerService {
-    
+
     List<GameGoalscorerDto> findAll();
-    
+
     GameGoalscorerDto save(GameGoalscorerDto ggDto) throws EntityExistsException, PlayerNotInTeamException, PlayerScoredMoreThanTeamException;
-    
+
     List<GameGoalscorerDto> findAllGoalscorers(Long gameId);
-    
+
     List<GameGoalscorerDto> findAllGamesScored(Long playerId);
-    
+
     Optional<GameGoalscorerDto> findByGamePlayer(Long gameId, Long playerId);
-    
+
     void delete(Long gameId, Long playerId);
-    
+
     GameGoalscorerDto update(GameGoalscorerDto ggDto, Long gameId, long playerId) throws EntityDoesntExistException, PlayerScoredMoreThanTeamException;
-    
-    
+
 }

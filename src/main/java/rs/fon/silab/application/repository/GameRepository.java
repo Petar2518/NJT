@@ -18,9 +18,10 @@ import rs.fon.silab.application.model.GameEntity;
  */
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface GameRepository extends JpaRepository<GameEntity, Long>{
-    List<GameEntity> findAllByHome_TeamName(String home);
-    List<GameEntity> findAllByAway_TeamName(String away);
-    
-}
+public interface GameRepository extends JpaRepository<GameEntity, Long> {
 
+    List<GameEntity> findAllByHome_TeamName(String home);
+
+    List<GameEntity> findAllByAway_TeamName(String away);
+
+}

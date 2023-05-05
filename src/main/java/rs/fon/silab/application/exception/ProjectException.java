@@ -8,7 +8,7 @@ package rs.fon.silab.application.exception;
  *
  * @author gg
  */
-public class ProjectException extends Exception{
+public class ProjectException extends Exception {
 
     public ProjectException() {
     }
@@ -29,6 +29,4 @@ public class ProjectException extends Exception{
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-  
-    
 }

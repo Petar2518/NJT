@@ -38,12 +38,11 @@ public class LeagueTeamsRestController {
 
     @Autowired
     LeagueTeamsService ltService;
-    
+
     @GetMapping
-    public List<LeagueTeamsDto> findAll(){
+    public List<LeagueTeamsDto> findAll() {
         return ltService.findAll();
     }
-    
 
     @GetMapping("/{league}/{team}")
     public ResponseEntity<Object> findById(@PathVariable Long league, @PathVariable Long team) {
@@ -72,10 +71,23 @@ public class LeagueTeamsRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
-    
-    @GetMapping("mutualleagues/{team1}/{team2}")
-    public List<LeagueTeamsDto> findAllLeagues(@PathVariable Long team1,@PathVariable Long team2) {
-        return ltService.findMutualLeagues(team1, team2);
+
+    @PostMapping("/competition/{team}/add")
+    public ResponseEntity<Object> saveCompetition(@Valid @RequestBody LeagueTeamsDto ltDto, @PathVariable Long team) {
+        try {
+            return ResponseEntity.ok(ltService.save(ltDto));
+        } catch (EntityExistsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/league/{league}/add")
+    public ResponseEntity<Object> saveTeam(@Valid @RequestBody LeagueTeamsDto ltDto, @PathVariable Long league) {
+        try {
+            return ResponseEntity.ok(ltService.save(ltDto));
+        } catch (EntityExistsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping(value = "delete/{league}/{team}")
@@ -91,6 +103,7 @@ public class LeagueTeamsRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleError(MethodArgumentNotValidException ex) {
         Map<String, String> map = new HashMap<>();

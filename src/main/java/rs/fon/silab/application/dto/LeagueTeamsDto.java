@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
  *
  * @author gg
  */
-public class LeagueTeamsDto implements Dto{
-    
-    @NotNull(message="League is required")
+public class LeagueTeamsDto implements Dto {
+
+    @NotNull(message = "League is required")
     private LeagueDto league;
-    @NotNull(message="Team is required")
+    @NotNull(message = "Team is required")
     private TeamDto team;
     @NotNull(message = "Points are required")
     private int points;
@@ -87,7 +87,5 @@ public class LeagueTeamsDto implements Dto{
     public String toString() {
         return "LeagueTeamsDto{" + "league=" + league + ", team=" + team + ", points=" + points + '}';
     }
-    
-    
-    
+
 }

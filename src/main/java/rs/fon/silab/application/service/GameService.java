@@ -30,7 +30,7 @@ public interface GameService {
 
     List<GameDto> findAllByAwayTeam(String teamName);
 
-    void delete(Long id);
-    
+    void delete(Long id) throws EntityDoesntExistException;
+
     GameDto updateResult(GameDto gameDto, Long id) throws EntityDoesntExistException;
 }

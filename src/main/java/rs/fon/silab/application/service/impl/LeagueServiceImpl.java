@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import rs.fon.silab.application.converter.LeagueConverter;
 import rs.fon.silab.application.dto.LeagueDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
@@ -23,7 +21,8 @@ import rs.fon.silab.application.service.LeagueService;
  * @author gg
  */
 @Service
-public class LeagueServiceImpl implements LeagueService{
+public class LeagueServiceImpl implements LeagueService {
+
     private final LeagueRepository leagueRepository;
     private final LeagueConverter leagueConverter;
 
@@ -40,7 +39,7 @@ public class LeagueServiceImpl implements LeagueService{
     @Override
     public List<LeagueDto> findAll() {
         List<LeagueEntity> leagues = leagueRepository.findAll();
-        return leagues.stream().map((entity)->{
+        return leagues.stream().map((entity) -> {
             return leagueConverter.toDto(entity);
         }).collect(Collectors.toList());
     }
@@ -48,7 +47,7 @@ public class LeagueServiceImpl implements LeagueService{
     @Override
     public List<LeagueDto> findAllByNation(String nation) {
         List<LeagueEntity> leagues = leagueRepository.findAllByLeagueNation(nation);
-        return leagues.stream().map((entity)->{
+        return leagues.stream().map((entity) -> {
             return leagueConverter.toDto(entity);
         }).collect(Collectors.toList());
     }
@@ -56,7 +55,7 @@ public class LeagueServiceImpl implements LeagueService{
     @Override
     public List<LeagueDto> findAllByDivision(String division) {
         List<LeagueEntity> leagues = leagueRepository.findAllByLeagueDivision(division);
-        return leagues.stream().map((entity)->{
+        return leagues.stream().map((entity) -> {
             return leagueConverter.toDto(entity);
         }).collect(Collectors.toList());
     }
@@ -64,7 +63,7 @@ public class LeagueServiceImpl implements LeagueService{
     @Override
     public List<LeagueDto> findByName(String name) {
         List<LeagueEntity> leagues = leagueRepository.findAllByLeagueName(name);
-        return leagues.stream().map((entity)->{
+        return leagues.stream().map((entity) -> {
             return leagueConverter.toDto(entity);
         }).collect(Collectors.toList());
     }
@@ -72,12 +71,11 @@ public class LeagueServiceImpl implements LeagueService{
     @Override
     public Optional<LeagueDto> findById(Long id) {
         Optional<LeagueEntity> entity = leagueRepository.findById(id);
-        if (entity.isPresent()){
+        if (entity.isPresent()) {
             return Optional.of(leagueConverter.toDto(entity.get()));
         }
         return Optional.empty();
     }
-
 
     @Override
     public void delete(Long id) {
@@ -86,14 +84,13 @@ public class LeagueServiceImpl implements LeagueService{
 
     @Override
     public LeagueDto updateName(LeagueDto leagueDto, Long id) throws EntityDoesntExistException {
-           Optional<LeagueEntity> league = leagueRepository.findById(id);
-        if (league.isEmpty()){
-            throw new EntityDoesntExistException(leagueDto,"Entity with given id doesnt exist.");
+        Optional<LeagueEntity> league = leagueRepository.findById(id);
+        if (league.isEmpty()) {
+            throw new EntityDoesntExistException(leagueDto, "Entity with given id doesnt exist.");
         }
 
         leagueDto.setLeagueId(id);
         return leagueConverter.toDto(leagueRepository.save(leagueConverter.toEntity(leagueDto)));
     }
-    
-    
+
 }

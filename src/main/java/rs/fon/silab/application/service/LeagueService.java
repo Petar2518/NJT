@@ -17,20 +17,20 @@ import rs.fon.silab.application.exception.EntityExistsException;
  */
 @Transactional
 public interface LeagueService {
-    
+
     LeagueDto save(LeagueDto leagueDto) throws EntityExistsException;
-    
+
     List<LeagueDto> findAll();
-    
+
     List<LeagueDto> findAllByNation(String nation);
-    
+
     List<LeagueDto> findAllByDivision(String division);
-    
+
     List<LeagueDto> findByName(String name);
-    
+
     Optional<LeagueDto> findById(Long id);
-    
+
     LeagueDto updateName(LeagueDto leagueDto, Long id) throws EntityDoesntExistException;
-    
+
     void delete(Long id);
 }

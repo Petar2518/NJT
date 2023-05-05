@@ -14,10 +14,11 @@ import rs.fon.silab.application.model.LeagueTeamsEntity;
  * @author gg
  */
 @Component
-public class LeagueTeamsConverter implements GenericConverter<LeagueTeamsDto, LeagueTeamsEntity>{
+public class LeagueTeamsConverter implements GenericConverter<LeagueTeamsDto, LeagueTeamsEntity> {
+
     private final LeagueConverter lc;
     private final TeamConverter tc;
-    
+
     @Autowired
     public LeagueTeamsConverter(LeagueConverter lc, TeamConverter tc) {
         this.lc = lc;
@@ -26,15 +27,13 @@ public class LeagueTeamsConverter implements GenericConverter<LeagueTeamsDto, Le
 
     @Override
     public LeagueTeamsEntity toEntity(LeagueTeamsDto d) {
-        LeagueTeamsEntity.ltId  id = new LeagueTeamsEntity.ltId(d.getLeague().getLeagueId(), d.getTeam().getTeamId());
+        LeagueTeamsEntity.ltId id = new LeagueTeamsEntity.ltId(d.getLeague().getLeagueId(), d.getTeam().getTeamId());
         return new LeagueTeamsEntity(id, lc.toEntity(d.getLeague()), tc.toEntity(d.getTeam()), d.getPoints());
     }
 
-    
-
     @Override
     public LeagueTeamsDto toDto(LeagueTeamsEntity e) {
-        return new LeagueTeamsDto(lc.toDto(e.getLeague()),tc.toDto(e.getTeam()), e.getPoints());
+        return new LeagueTeamsDto(lc.toDto(e.getLeague()), tc.toDto(e.getTeam()), e.getPoints());
     }
-    
+
 }

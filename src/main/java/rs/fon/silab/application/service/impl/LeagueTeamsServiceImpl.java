@@ -4,13 +4,10 @@
  */
 package rs.fon.silab.application.service.impl;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import rs.fon.silab.application.converter.LeagueTeamsConverter;
 import rs.fon.silab.application.dto.LeagueTeamsDto;
 import rs.fon.silab.application.exception.EntityDoesntExistException;
@@ -60,21 +57,6 @@ public class LeagueTeamsServiceImpl implements LeagueTeamsService {
         return teams.stream().map((entity) -> {
             return leagueTeamsConverter.toDto(entity);
         }).collect(Collectors.toList());
-    }
-
-    public List<LeagueTeamsDto> findMutualLeagues(Long team1, Long team2) {
-        List<LeagueTeamsEntity> teams1 = leagueTeamsRepository.findAllByIdTeamId(team1);
-        List<LeagueTeamsEntity> teams2 = leagueTeamsRepository.findAllByIdTeamId(team2);
-        List<LeagueTeamsEntity> teams = new LinkedList<>();
-        for (LeagueTeamsEntity team : teams2) {
-            if (teams1.contains(team)) {
-                teams.add(team);
-            }
-            
-        }
-            return teams.stream().map((entity) -> {
-                return leagueTeamsConverter.toDto(entity);
-            }).collect(Collectors.toList());
     }
 
     @Override

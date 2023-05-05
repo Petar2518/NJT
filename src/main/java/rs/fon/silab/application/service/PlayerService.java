@@ -29,9 +29,9 @@ public interface PlayerService {
     public void delete(Long id);
 
     public List<PlayerDto> findByAgeGreaterThan(int age);
-    
+
     public PlayerDto updateInfo(PlayerDto playerDto, long id) throws EntityDoesntExistException;
-    
+
     public List<PlayerDto> findAll();
 
 }

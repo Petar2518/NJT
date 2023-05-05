@@ -13,10 +13,8 @@ import rs.fon.silab.application.model.LeagueEntity;
  * @author gg
  */
 @Component
-public class LeagueConverter implements GenericConverter<LeagueDto, LeagueEntity>{
-    
+public class LeagueConverter implements GenericConverter<LeagueDto, LeagueEntity> {
 
-    
     @Override
     public LeagueEntity toEntity(LeagueDto d) {
         return new LeagueEntity(d.getLeagueId(), d.getLeagueName(), d.getLeagueNation(), d.getLeagueDivision(), d.getSeason());

@@ -8,7 +8,8 @@ package rs.fon.silab.application.exception;
  *
  * @author gg
  */
-public class PlayerScoredMoreThanTeamException extends ProjectException{
+public class PlayerScoredMoreThanTeamException extends ProjectException {
+
     private final Object entity;
 
     public PlayerScoredMoreThanTeamException(Object entity, String message) {
@@ -16,10 +17,8 @@ public class PlayerScoredMoreThanTeamException extends ProjectException{
         this.entity = entity;
     }
 
-    
-
     public Object getEntity() {
         return entity;
     }
-    
+
 }

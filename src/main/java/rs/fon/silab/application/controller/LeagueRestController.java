@@ -33,54 +33,57 @@ import rs.fon.silab.application.service.LeagueService;
  */
 @RestController
 public class LeagueRestController {
-    
+
     @Autowired
     private LeagueService leagueService;
-    
-    
+
     @GetMapping("/leagues")
-    public List<LeagueDto> findAll(){
+    public List<LeagueDto> findAll() {
         return leagueService.findAll();
     }
-    
+
     @GetMapping("leaguenation/{nation}")
-    public List<LeagueDto> findByNation(@PathVariable String nation){
+    public List<LeagueDto> findByNation(@PathVariable String nation) {
         return leagueService.findAllByNation(nation);
     }
-    
+
     @GetMapping("leaguedivision/{division}")
-    public List<LeagueDto> findByDivision(@PathVariable String division){
+    public List<LeagueDto> findByDivision(@PathVariable String division) {
         return leagueService.findAllByDivision(division);
     }
-    
+
     @GetMapping("/leagues/league/{id}")
-    public ResponseEntity<Object> findById(@PathVariable Long id){
+    public ResponseEntity<Object> findById(@PathVariable Long id) {
         Optional<LeagueDto> entity = leagueService.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             return ResponseEntity.ok(entity.get());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid league");
     }
+
     @PostMapping("/leagues/league/add")
-    public ResponseEntity<Object> save(@RequestBody LeagueDto leagueDto){
+    public ResponseEntity<Object> save(@RequestBody LeagueDto leagueDto) {
         try {
             return ResponseEntity.ok(leagueService.save(leagueDto));
         } catch (EntityExistsException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
     @DeleteMapping("/leagues/delete/{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         leagueService.delete(id);
     }
+
     @PutMapping("/leagues/league/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody LeagueDto leagueDto){
+    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody LeagueDto leagueDto) {
         try {
             return ResponseEntity.ok(leagueService.updateName(leagueDto, id));
         } catch (EntityDoesntExistException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleError(MethodArgumentNotValidException ex) {
         Map<String, String> map = new HashMap<>();

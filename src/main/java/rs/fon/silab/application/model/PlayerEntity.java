@@ -13,16 +13,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import rs.fon.silab.application.util.PositionEnum;
 
-
 /**
  *
  * @author gg
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class PlayerEntity extends FootballPersonEntity{
-    
-    
+public class PlayerEntity extends FootballPersonEntity {
+
     @Enumerated(EnumType.STRING)
     @Column
     private PositionEnum position;
@@ -38,9 +36,8 @@ public class PlayerEntity extends FootballPersonEntity{
     public PlayerEntity(Long id) {
         super(id);
     }
-    
 
-    public PlayerEntity( Long id, String name,String position, TeamEntity team, int age) {
+    public PlayerEntity(Long id, String name, String position, TeamEntity team, int age) {
         super(id, name, team, age);
         this.position = PositionEnum.valueOf(position);
     }
@@ -50,7 +47,7 @@ public class PlayerEntity extends FootballPersonEntity{
         this.position = PositionEnum.valueOf(position);
     }
 
-     public String getPosition() {
+    public String getPosition() {
         return this.position.name();
     }
 
@@ -84,9 +81,5 @@ public class PlayerEntity extends FootballPersonEntity{
     public String toString() {
         return "PlayerEntity{" + "position=" + position + '}';
     }
-    
-    
-    
-    
-}
 
+}

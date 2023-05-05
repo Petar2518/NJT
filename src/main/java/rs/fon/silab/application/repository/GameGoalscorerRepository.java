@@ -17,8 +17,9 @@ import rs.fon.silab.application.model.GameGoalscorerEntity;
  */
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface GameGoalscorerRepository extends JpaRepository<GameGoalscorerEntity, GameGoalscorerEntity.ggId>{
-    
+public interface GameGoalscorerRepository extends JpaRepository<GameGoalscorerEntity, GameGoalscorerEntity.ggId> {
+
     List<GameGoalscorerEntity> findAllByIdGameId(Long gameId);
+
     List<GameGoalscorerEntity> findAllByIdPlayerId(Long playerId);
 }

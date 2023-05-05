@@ -20,25 +20,27 @@ import javax.persistence.Table;
  * @author gg
  */
 @Entity
-@Table(name="game")
-public class GameEntity implements Serializable,rs.fon.silab.application.model.Entity{
+@Table(name = "game")
+public class GameEntity implements Serializable, rs.fon.silab.application.model.Entity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="game_id")
+    @Column(name = "game_id")
     private Long gameId;
     @ManyToOne
-    @JoinColumn(name= "home_team", referencedColumnName = "team_id")
+    @JoinColumn(name = "home_team", referencedColumnName = "team_id")
     private TeamEntity home;
-    @Column (name = "home_goals")
+    @Column(name = "home_goals")
     private int homeTeamGoals;
     @ManyToOne
-    @JoinColumn(name="away_team", referencedColumnName = "team_id")
+    @JoinColumn(name = "away_team", referencedColumnName = "team_id")
     private TeamEntity away;
-    @Column (name="away_goals")
+    @Column(name = "away_goals")
     private int awayTeamGoals;
     @ManyToOne
-    @JoinColumn(name="league", referencedColumnName = "league_id")
+    @JoinColumn(name = "league", referencedColumnName = "league_id")
     private LeagueEntity league;
+
     public GameEntity() {
     }
 
@@ -54,9 +56,6 @@ public class GameEntity implements Serializable,rs.fon.silab.application.model.E
         this.awayTeamGoals = awayTeamGoals;
         this.league = league;
     }
-    
-
-    
 
     public Long getGameId() {
         return gameId;
@@ -152,11 +151,5 @@ public class GameEntity implements Serializable,rs.fon.silab.application.model.E
     public String toString() {
         return "GameEntity{" + "gameId=" + gameId + ", home=" + home + ", homeTeamGoals=" + homeTeamGoals + ", away=" + away + ", awayTeamGoals=" + awayTeamGoals + ", league=" + league + '}';
     }
-    
-    
 
-    
-
-   
-    
 }

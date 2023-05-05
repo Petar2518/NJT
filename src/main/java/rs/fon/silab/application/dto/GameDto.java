@@ -7,22 +7,21 @@ package rs.fon.silab.application.dto;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
-
-
 /**
  *
  * @author gg
  */
-public class GameDto implements Dto{
-    @NotNull(message= "Game ID is required")
+public class GameDto implements Dto {
+
+    @NotNull(message = "Game ID is required")
     private Long gameId;
-    @NotNull(message= "Home team is required")
+    @NotNull(message = "Home team is required")
     private TeamDto homeTeam;
-    @NotNull(message= "Away team is required")
+    @NotNull(message = "Away team is required")
     private TeamDto awayTeam;
-    @NotNull(message= "Number of goals scored by home team is required")
+    @NotNull(message = "Number of goals scored by home team is required")
     private int homeTeamGoals;
-    @NotNull(message= "Number of goals scored by away team is required")
+    @NotNull(message = "Number of goals scored by away team is required")
     private int awayTeamGoals;
     private LeagueDto league;
 
@@ -41,9 +40,6 @@ public class GameDto implements Dto{
         this.awayTeamGoals = awayTeamGoals;
         this.league = league;
     }
-
-
-    
 
     public Long getGameId() {
         return gameId;
@@ -140,13 +136,4 @@ public class GameDto implements Dto{
         return "GameDto{" + "gameId=" + gameId + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", homeTeamGoals=" + homeTeamGoals + ", awayTeamGoals=" + awayTeamGoals + ", league=" + league + '}';
     }
 
-    
-
-
-
-    
-
-
-    
-    
 }

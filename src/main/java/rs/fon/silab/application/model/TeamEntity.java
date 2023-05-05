@@ -50,8 +50,6 @@ public class TeamEntity implements Serializable, rs.fon.silab.application.model.
         this.teamId = teamId;
     }
 
-   
-
     public String getTeamName() {
         return teamName;
     }

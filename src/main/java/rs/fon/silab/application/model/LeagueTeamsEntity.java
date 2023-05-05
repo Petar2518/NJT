@@ -22,21 +22,19 @@ import javax.persistence.MapsId;
 @Entity
 @Table(name = "leagueteams")
 
+public class LeagueTeamsEntity implements Serializable, rs.fon.silab.application.model.Entity {
 
-
-
-public class LeagueTeamsEntity implements Serializable,rs.fon.silab.application.model.Entity{
     @EmbeddedId
     ltId id;
     @ManyToOne
     @MapsId("leagueId")
-    @JoinColumn(name="league_id")
+    @JoinColumn(name = "league_id")
     private LeagueEntity league;
     @ManyToOne
     @MapsId("teamId")
-    @JoinColumn(name="team")
+    @JoinColumn(name = "team")
     private TeamEntity team;
-    @Column(name="points")
+    @Column(name = "points")
     private int points;
 
     public LeagueTeamsEntity() {
@@ -119,13 +117,13 @@ public class LeagueTeamsEntity implements Serializable,rs.fon.silab.application.
     public String toString() {
         return "LeagueTeamsEntity{" + "id=" + id + ", league=" + league + ", team=" + team + ", points=" + points + '}';
     }
- 
+
     @Embeddable
-    public static class ltId implements Serializable{
-        
-        @Column(name= "league_id")
+    public static class ltId implements Serializable {
+
+        @Column(name = "league_id")
         private Long leagueId;
-        @Column(name="team")
+        @Column(name = "team")
         private Long teamId;
 
         public ltId() {
@@ -182,12 +180,6 @@ public class LeagueTeamsEntity implements Serializable,rs.fon.silab.application.
         public String toString() {
             return "ltId{" + "leagueId=" + leagueId + ", teamId=" + teamId + '}';
         }
-
-        
-
-        
-
-        
 
     }
 }

@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import rs.fon.silab.application.converter.GameGoalscorerConverter;
 import rs.fon.silab.application.dto.GameDto;
 import rs.fon.silab.application.dto.GameGoalscorerDto;
@@ -26,7 +24,6 @@ import rs.fon.silab.application.repository.GameGoalscorerRepository;
 import rs.fon.silab.application.service.GameGoalscorerService;
 import rs.fon.silab.application.service.GameService;
 import rs.fon.silab.application.service.PlayerService;
-import rs.fon.silab.application.service.TeamService;
 
 /**
  *
@@ -47,7 +44,6 @@ public class GameGoalscorerServiceImpl implements GameGoalscorerService {
         this.gameService = gameService;
     }
 
-    
     @Override
     public GameGoalscorerDto save(GameGoalscorerDto ggDto) throws EntityExistsException, PlayerNotInTeamException, PlayerScoredMoreThanTeamException {
         GameGoalscorerEntity.ggId ggid = new GameGoalscorerEntity.ggId(ggDto.getGame().getGameId(), ggDto.getPlayer().getPlayerId());
@@ -55,39 +51,39 @@ public class GameGoalscorerServiceImpl implements GameGoalscorerService {
         if (entity.isPresent()) {
             throw new EntityExistsException(entity, "Goalscorer for that game already exists");
         }
-//        Long playerId;
-//        Long gameId = ;
         PlayerDto player = playerService.findById(ggDto.getPlayer().getPlayerId()).get();
         GameDto game = gameService.findById(ggDto.getGame().getGameId()).get();
         TeamDto team = player.getTeam();
         List<TeamDto> teams = new ArrayList<>();
         teams.add(game.getAwayTeam());
         teams.add(game.getHomeTeam());
-        TeamDto homeTeam=game.getHomeTeam();
+        TeamDto homeTeam = game.getHomeTeam();
         if (!(teams.contains(team))) {
             throw new PlayerNotInTeamException(ggDto.getPlayer(), "Player doesnt play for teams in this game.");
         }
         int remainingGoalsHome = game.getHomeTeamGoals();
         int remainingGoalsAway = game.getAwayTeamGoals();
         for (GameGoalscorerDto gs : findAllGoalscorers(ggDto.getGame().getGameId())) {
-            if(playerService.findById(gs.getPlayer().getPlayerId()).get().getTeam().equals(homeTeam)){
-                remainingGoalsHome-=gs.getGoals();
-            }else remainingGoalsAway-=gs.getGoals();
-        }   
+            if (playerService.findById(gs.getPlayer().getPlayerId()).get().getTeam().equals(homeTeam)) {
+                remainingGoalsHome -= gs.getGoals();
+            } else {
+                remainingGoalsAway -= gs.getGoals();
+            }
+        }
         if (team.equals(game.getHomeTeam())) {
             if (ggDto.getGoals() > remainingGoalsHome) {
-                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getHomeTeamGoals() + "goals and " + (game.getHomeTeamGoals()-remainingGoalsHome) + "of goals have already been assigned to other players.");
+                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getHomeTeamGoals() + "goals and " + (game.getHomeTeamGoals() - remainingGoalsHome) + "of goals have already been assigned to other players.");
             }
         }
         if (team.equals(game.getAwayTeam())) {
             if (ggDto.getGoals() > remainingGoalsAway) {
-                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getAwayTeamGoals() + "goals and " + (game.getAwayTeamGoals()-remainingGoalsAway) + "of goals have already been assigned to other players.");
+                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getAwayTeamGoals() + "goals and " + (game.getAwayTeamGoals() - remainingGoalsAway) + "of goals have already been assigned to other players.");
             }
         }
         System.out.println(team.getTeamName());
         System.out.println(ggDto.getTeam().getTeamName());
         System.out.println(ggDto.getTeam().getTeamId());
-        
+
         ggDto.setTeam(team);
         return ggConverter.toDto(ggRepository.save(ggConverter.toEntity(ggDto)));
     }
@@ -115,34 +111,36 @@ public class GameGoalscorerServiceImpl implements GameGoalscorerService {
     }
 
     @Override
-    public GameGoalscorerDto update(GameGoalscorerDto ggDto, Long gameId, long playerId)throws EntityDoesntExistException, PlayerScoredMoreThanTeamException{
+    public GameGoalscorerDto update(GameGoalscorerDto ggDto, Long gameId, long playerId) throws EntityDoesntExistException, PlayerScoredMoreThanTeamException {
         GameGoalscorerEntity.ggId id = new GameGoalscorerEntity.ggId(gameId, playerId);
         Optional<GameGoalscorerEntity> goalscorer = ggRepository.findById(id);
-        if (goalscorer.isEmpty()){
-            throw new EntityDoesntExistException(ggDto,"Entity with given id doesnt exist.");
+        if (goalscorer.isEmpty()) {
+            throw new EntityDoesntExistException(ggDto, "Entity with given id doesnt exist.");
         }
-        GameGoalscorerDto goalscorerD=ggConverter.toDto(goalscorer.get());
+        GameGoalscorerDto goalscorerD = ggConverter.toDto(goalscorer.get());
         PlayerDto player = playerService.findById(playerId).get();
         TeamDto team = player.getTeam();
         GameDto game = gameService.findById(gameId).get();
         int remainingGoalsHome = game.getHomeTeamGoals();
         int remainingGoalsAway = game.getAwayTeamGoals();
         for (GameGoalscorerDto gs : findAllGoalscorers(gameId)) {
-            if(playerService.findById(gs.getPlayer().getPlayerId()).get().getTeam().equals(game.getHomeTeam())){
-                
-                remainingGoalsHome-=gs.getGoals();
-            }else remainingGoalsAway-=gs.getGoals();
+            if (playerService.findById(gs.getPlayer().getPlayerId()).get().getTeam().equals(game.getHomeTeam())) {
+
+                remainingGoalsHome -= gs.getGoals();
+            } else {
+                remainingGoalsAway -= gs.getGoals();
+            }
         }
         if (team.equals(game.getHomeTeam())) {
-            remainingGoalsHome+=goalscorer.get().getGoals();
+            remainingGoalsHome += goalscorer.get().getGoals();
             if (ggDto.getGoals() > remainingGoalsHome) {
-                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getHomeTeamGoals() + "goals and " + (game.getHomeTeamGoals()-remainingGoalsHome) + "of goals have already been assigned to other players.");
+                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getHomeTeamGoals() + "goals and " + (game.getHomeTeamGoals() - remainingGoalsHome) + "of goals have already been assigned to other players.");
             }
         }
         if (team.equals(game.getAwayTeam())) {
-            remainingGoalsAway +=goalscorer.get().getGoals();
-            if (ggDto.getGoals() > remainingGoalsAway ) {
-                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getAwayTeamGoals() + "goals and " + (game.getAwayTeamGoals()-remainingGoalsAway) + "of goals have already been assigned to other players.");
+            remainingGoalsAway += goalscorer.get().getGoals();
+            if (ggDto.getGoals() > remainingGoalsAway) {
+                throw new PlayerScoredMoreThanTeamException(ggDto, "Team has scored " + game.getAwayTeamGoals() + "goals and " + (game.getAwayTeamGoals() - remainingGoalsAway) + "of goals have already been assigned to other players.");
             }
         }
         goalscorerD.setGoals(ggDto.getGoals());
@@ -160,13 +158,11 @@ public class GameGoalscorerServiceImpl implements GameGoalscorerService {
     @Override
     public Optional<GameGoalscorerDto> findByGamePlayer(Long gameId, Long playerId) {
         GameGoalscorerEntity.ggId id = new GameGoalscorerEntity.ggId(gameId, playerId);
-         Optional<GameGoalscorerEntity> entity = ggRepository.findById(id);
-        if (entity.isPresent()){
+        Optional<GameGoalscorerEntity> entity = ggRepository.findById(id);
+        if (entity.isPresent()) {
             return Optional.of(ggConverter.toDto(entity.get()));
         }
         return Optional.empty();
     }
-    
-    
-    
+
 }

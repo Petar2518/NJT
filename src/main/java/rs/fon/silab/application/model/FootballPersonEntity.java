@@ -20,19 +20,21 @@ import javax.persistence.Entity;
  * @author gg
  */
 @Entity
-@Table(name="player")
-public class FootballPersonEntity implements Serializable,rs.fon.silab.application.model.Entity{
+@Table(name = "player")
+public class FootballPersonEntity implements Serializable, rs.fon.silab.application.model.Entity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="player_id")
+    @Column(name = "player_id")
     private Long playerId;
     @Column
     private String name;
     @ManyToOne
-    @JoinColumn(name= "team", referencedColumnName = "team_id")
+    @JoinColumn(name = "team", referencedColumnName = "team_id")
     private TeamEntity team;
     @Column
     private int age;
+
     public FootballPersonEntity() {
     }
 
@@ -117,5 +119,5 @@ public class FootballPersonEntity implements Serializable,rs.fon.silab.applicati
     public String toString() {
         return "FootballPersonEntity{" + "id=" + playerId + ", name=" + name + ", team=" + team + ", age=" + age + '}';
     }
-    
+
 }

@@ -40,6 +40,7 @@ public class TeamRestController {
     public List<TeamDto> allTeams() {
         return teamService.findAll();
     }
+
     @GetMapping("/teams/team/{id}")
     public ResponseEntity<Object> findByName(@PathVariable Long id) {
         Optional<TeamDto> entity = teamService.findById(id);
@@ -57,6 +58,7 @@ public class TeamRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
     @GetMapping("findbycity/{city}")
     public List<TeamDto> findTeamsByCity(@PathVariable String city) {
         return teamService.findAllByCity(city);
@@ -71,14 +73,16 @@ public class TeamRestController {
     public void delete(@PathVariable Long id) {
         teamService.delete(id);
     }
+
     @PutMapping("teams/team/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody TeamDto teamDto){
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody TeamDto teamDto) {
         try {
             return ResponseEntity.ok(teamService.updateLocation(teamDto, id));
         } catch (EntityDoesntExistException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleError(MethodArgumentNotValidException ex) {
         Map<String, String> map = new HashMap<>();
